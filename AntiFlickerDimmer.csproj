@@ -11,6 +11,12 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <PathMap>$(MSBuildProjectDirectory)=/_</PathMap>
+  </PropertyGroup>
+
   <ItemGroup>
     <Resource Include="app.ico" />
     <Resource Include="app.png" />

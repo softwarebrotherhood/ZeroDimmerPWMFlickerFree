@@ -1,8 +1,6 @@
-# Build and binary outputs
-bin/
+# Ignore compiler intermediates and debug builds
 obj/
-publish/
-publish_*/
+bin/Debug/
 
 # Visual Studio / Rider / VSCode caches
 .vs/
