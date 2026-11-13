@@ -1,0 +1,25 @@
+# Build and binary outputs
+bin/
+obj/
+publish/
+publish_*/
+
+# Visual Studio / Rider / VSCode caches
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.dbmdl
+
+# Logs and temp files
+*.log
+*.tmp
+debug.log
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

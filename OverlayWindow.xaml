@@ -1,0 +1,16 @@
+<Window x:Class="AntiFlickerDimmer.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dimmer Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Focusable="False"
+        ResizeMode="NoResize"
+        UseLayoutRounding="True">
+    <Grid x:Name="OverlayCanvas" Background="#000000" Opacity="0.0" IsHitTestVisible="False">
+    </Grid>
+</Window>
