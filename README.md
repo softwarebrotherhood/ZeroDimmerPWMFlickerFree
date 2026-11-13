@@ -2,7 +2,12 @@
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%20Windows%2011-0078D6?logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer)
 [![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Download](https://img.shields.io/badge/Download-Installer%20(.exe)-0284C7?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
+
+> ### 📥 **[Download FlickerFree Dimmer v1.0.0 (Installer .exe)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)**
+> Click the button or link above to download the installer for Windows 10 & 11. Includes high-resolution desktop and start menu shortcuts with no administrator rights required to install.
+
+---
 
 A modern, high-performance Windows desktop application designed specifically for people sensitive to **screen flickering (PWM - Pulse-Width Modulation)** on laptop screens and external displays.
 
@@ -46,17 +51,21 @@ Many modern laptop displays (OLED, mini-LED, and IPS panels) control hardware ba
 
 ---
 
-## 📦 Installation & Setup (.exe)
+## 📦 Download & Installation
 
-### Option 1: Standard Windows Installer (Recommended)
-Run the setup file:
-- **`bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe`**
-- Installs with custom high-DPI desktop and start menu shortcuts.
-- Includes clean uninstallation support in Windows Settings > Apps.
+### Option 1: Windows Installer (Recommended)
 
-### Option 2: Portable Run
+[![Download Installer](https://img.shields.io/badge/Download_Installer-v1.0.0_(.exe)-0284C7?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
+
+Direct Link: **[FlickerFreeDimmer_Setup_v1.0.0.exe](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)**
+
+- Single-click setup with automatic desktop and Start Menu shortcuts.
+- No administrator elevation needed to install.
+- Clean uninstallation via Windows Settings > Installed Apps.
+
+### Option 2: Portable Package
 Run directly without installing:
-- `bin/Release/net9.0-windows/publish/AntiFlickerDimmer.exe`
+- Navigate to `bin/Release/net9.0-windows/publish/` and run `AntiFlickerDimmer.exe`.
 
 ---
 
@@ -90,9 +99,3 @@ dotnet run -c Release
 ```powershell
 dotnet publish -c Release -o ./publish
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
