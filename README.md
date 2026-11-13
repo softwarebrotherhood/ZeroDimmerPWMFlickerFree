@@ -46,6 +46,20 @@ Many modern laptop displays (OLED, mini-LED, and IPS panels) control hardware ba
 
 ---
 
+## 📦 Installation & Setup (.exe)
+
+### Option 1: Standard Windows Installer (Recommended)
+Run the setup file:
+- **`bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe`**
+- Installs with custom high-DPI desktop and start menu shortcuts.
+- Includes clean uninstallation support in Windows Settings > Apps.
+
+### Option 2: Portable Run
+Run directly without installing:
+- `bin/Release/net9.0-windows/publish/AntiFlickerDimmer.exe`
+
+---
+
 ## 🔒 Dimming "Run as Administrator" (UAC) Popups
 
 By default, Windows switches to an isolated "Secure Desktop" for administrator elevation prompts, which temporarily bypasses all user software.
