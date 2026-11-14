@@ -1,101 +1,144 @@
-# FlickerFree Dimmer 🛡️🌙
+# FlickerFree PWM Dimmer 🛡️🌙
 
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%20Windows%2011-0078D6?logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer)
-[![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![Download](https://img.shields.io/badge/Download-Installer%20(.exe)-0284C7?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
-
-> ### 📥 **[Download FlickerFree Dimmer v1.0.0 (Installer .exe)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)**
-> Click the button or link above to download the installer for Windows 10 & 11. Includes high-resolution desktop and start menu shortcuts with no administrator rights required to install.
+[![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
+[![macOS](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
+[![Linux](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Actions](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions/workflows/build-all.yml/badge.svg)](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions)
 
 ---
 
-A modern, high-performance Windows desktop application designed specifically for people sensitive to **screen flickering (PWM - Pulse-Width Modulation)** on laptop screens and external displays.
+### 📥 Instant Downloads
+
+| Platform | Download Package | Format | Architecture |
+| :--- | :--- | :--- | :--- |
+| **Windows** | [**Download Windows Installer**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
+| **Windows Portable** | [**Download Portable ZIP**](https://github.com/salamimarketer/FlikerFreePWMDimmer/tree/main/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
+| **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
+| **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
 
 ---
 
 ## ⚡ The Science: Why Hardware Brightness Flickers
 
-Many modern laptop displays (OLED, mini-LED, and IPS panels) control hardware backlight brightness using **Pulse-Width Modulation (PWM)**:
-- **At lower hardware brightness (20% – 60%):** The backlight rapidly cycles between 100% ON and completely OFF hundreds of times every second. Even when invisible to the conscious eye, this rapid strobing causes severe eye fatigue, dry eyes, tension headaches, and migraines.
-- **At 100% hardware brightness:** The PWM duty cycle is **100% constant ON**. There is **ZERO backlight strobing or flickering**!
+Modern laptop screens and desktop monitors (OLED, mini-LED Liquid Retina XDR, and fast IPS panels) control backlight output via **Pulse-Width Modulation (PWM)**:
 
-### 💡 The FlickerFree Solution
-1. Keep your laptop's physical screen brightness (via Windows slider or keyboard `Fn` brightness keys) at **100%**.
-2. **FlickerFree Dimmer** dims the screen using software-level color processing via the Windows Desktop Window Manager (DWM) compositor.
-3. You enjoy a comfortably dark display **with zero PWM flicker and zero eye strain**!
+- **At lower hardware brightness (10% – 70%):** The backlight rapidly cycles between 100% ON and 0% OFF hundreds or thousands of times every second. Even when invisible to the naked eye, this rapid strobing causes severe **eye strain, tension headaches, dry eyes, and migraines**.
+- **At 100% hardware brightness:** The duty cycle is **100% constant direct current (DC)**. There is **ZERO backlight strobing or flickering**!
 
----
-
-## ✨ Key Features
-
-- **Full Desktop & Taskbar Deep Dimming (DWM Engine - Default):**
-  - Operates inside the Windows DWM fullscreen color matrix pipeline.
-  - **Dims EVERYTHING uniformly:** The Windows Taskbar, Start Menu, right-click context menus, notification flyouts, tooltips, popups, and all running applications.
-  - **Zero bright leaks!** No blinding flashbangs when clicking taskbar icons or opening menus.
-- **Classic Window Overlay Mode (Alternative):**
-  - 100% click-through transparent layer (`WS_EX_TRANSPARENT | WS_EX_LAYERED`).
-- **Global Hotkeys:** Adjust screen darkness instantly from any application or full-screen game:
-  - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↓</kbd> : Darken screen (+5%)
-  - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↑</kbd> : Brighten screen (-5%)
-  - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd> : Quick Toggle Dimmer On/Off
-  - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Esc</kbd> : Emergency Safety Reset (0% darkness)
-- **Floating On-Screen Display (OSD):** Sleek floating visual pill indicating the current darkness level when pressing hotkeys.
-- **Eye-Care Color Tints:**
-  - **Neutral Black:** True software dimming, preserving color fidelity while reducing overall light output.
-  - **Warm Amber:** Gentle night-reading blue-light filter.
-  - **Cozy Candle:** Soft warm evening glow.
-  - **Soft Green:** Soothing contrast tint for reading comfort.
-- **Safety Dark Cap:** Capped at 90% max darkness to prevent accidental pitch-black lockouts.
-- **System Tray Integration:** Runs silently in the background with quick presets (`Off`, `20%`, `40%`, `60%`, `80%`).
-- **Autostart:** Optional one-click "Start with Windows" feature.
-
----
-
-## 📦 Download & Installation
-
-### Option 1: Windows Installer (Recommended)
-
-[![Download Installer](https://img.shields.io/badge/Download_Installer-v1.0.0_(.exe)-0284C7?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
-
-Direct Link: **[FlickerFreeDimmer_Setup_v1.0.0.exe](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)**
-
-- Single-click setup with automatic desktop and Start Menu shortcuts.
-- No administrator elevation needed to install.
-- Clean uninstallation via Windows Settings > Installed Apps.
-
-### Option 2: Portable Package
-Run directly without installing:
-- Navigate to `bin/Release/net9.0-windows/publish/` and run `AntiFlickerDimmer.exe`.
-
----
-
-## 🔒 Dimming "Run as Administrator" (UAC) Popups
-
-By default, Windows switches to an isolated "Secure Desktop" for administrator elevation prompts, which temporarily bypasses all user software.
-
-To make administrator confirmation prompts stay dimmed:
-- Click **"Dim Administrator Popups"** directly inside the app's settings card, or run `Fix-UAC-Dimming.bat` as administrator.
-- This sets Windows policy `PromptOnSecureDesktop = 0`, keeping elevation prompts directly on your normal desktop where **FlickerFree Dimmer** dims them seamlessly.
-
----
-
-## 🚀 Building & Running from Source
-
-### Prerequisites
-- Windows 10 (Build 1607+) or Windows 11
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-
-### Quick Start
-```powershell
-# Clone the repository
-git clone https://github.com/salamimarketer/FlikerFreePWMDimmer.git
-cd FlikerFreePWMDimmer
-
-# Build and run
-dotnet run -c Release
+```
+Hardware Dimming (<70%):   █   █   █   █   █   █   (PWM Backlight Strobing -> Eye Fatigue)
+FlickerFree Dimmer (100%): ═════════════════════════ (100% Constant DC Backlight + Software Dimming)
 ```
 
-### Publish Self-Contained Executable
-```powershell
-dotnet publish -c Release -o ./publish
+### 💡 The Solution
+1. Keep physical screen brightness at **100%** (via your keyboard brightness keys or system settings).
+2. Use **FlickerFree Dimmer** to dim pixels at the operating system compositor level.
+3. Enjoy a dark, comfortable screen with **0 Hz PWM flicker**!
+
+---
+
+## 🖥️ Platform Comparison & Architecture
+
+| Feature | Windows 🪟 | macOS 🍎 | Linux 🐧 |
+| :--- | :--- | :--- | :--- |
+| **Primary Engine** | DWM Magnification API (`MagSetFullscreenColorEffect`) | CoreGraphics Transfer Table (`CGSetDisplayTransferByTable`) | `xrandr` Gamma Ramps (0% CPU) |
+| **Fallback Engine** | `WS_EX_TRANSPARENT` Overlay Window | Multi-Screen `.screenSaver` Overlay | GTK 3 Click-Through Layer Overlay |
+| **Taskbar / Panel Dimmed** | ✅ Yes (Post-DWM Composition) | ✅ Yes (Menu Bar + Dock) | ✅ Yes (Panels, Docks, Trays) |
+| **Context Menus & Popups** | ✅ Uniformly Dimmed | ✅ Uniformly Dimmed | ✅ Uniformly Dimmed |
+| **Administrator Dialogs** | ✅ Yes (via Secure Desktop bypass) | ✅ Yes | ✅ Yes (Polkit / Sudo) |
+| **Technology Stack** | C# 12 / .NET 9 WPF | Swift 5.7+ / SwiftUI / AppKit | Python 3 / GTK 3 / PyGObject |
+
+---
+
+## 🪟 Windows Version
+
+### Installation
+- Download and run [**FlickerFreeDimmer_Setup_v1.0.0.exe**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe).
+- Installs to local app data (no admin rights needed), creates Desktop & Start Menu shortcuts.
+
+### Global Hotkeys
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↓</kbd> : Darken screen (+5%)
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↑</kbd> : Brighten screen (-5%)
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd> : Toggle Dimmer On/Off
+- <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Esc</kbd> : Emergency Safety Reset (0% darkness)
+
+### Dimming Administrator (UAC) Popups
+Windows normally shifts to an isolated "Secure Desktop" for UAC prompts. To dim elevation prompts seamlessly:
+- Click **"Dim Administrator Popups"** in the app UI, or run `Fix-UAC-Dimming.bat` as administrator.
+
+---
+
+## 🍎 macOS Version
+
+Zero-PWM software screen dimmer for MacBook Pro (M1/M2/M3/M4 Liquid Retina XDR mini-LED), MacBook Air, and external displays.
+
+### Quick Run / Build
+```bash
+cd macos
+swift run
 ```
+Or generate the `.app` bundle:
+```bash
+chmod +x build-app.sh
+./build-app.sh
+open FlickerFreeDimmer.app
+```
+
+### Hotkeys
+- <kbd>⌥ Option</kbd> + <kbd>⌘ Command</kbd> + <kbd>↓</kbd> : Darken screen
+- <kbd>⌥ Option</kbd> + <kbd>⌘ Command</kbd> + <kbd>↑</kbd> : Brighten screen
+
+Read the full [macOS Documentation](macos/README.md).
+
+---
+
+## 🐧 Linux Version
+
+Zero-PWM screen dimmer for Ubuntu, Debian, Fedora, Arch, Linux Mint, Pop!_OS, and other distributions.
+
+### 1-Click Install (No Sudo Required)
+```bash
+cd linux
+chmod +x install.sh
+./install.sh
+```
+
+### Dependencies
+- **Ubuntu / Debian / Mint:**
+  ```bash
+  sudo apt install python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-ayatanaappindicator3-0.1 x11-xserver-utils
+  ```
+- **Fedora:**
+  ```bash
+  sudo dnf install python3-gobject gtk3 libayatana-appindicator-gtk3 xrandr
+  ```
+- **Arch Linux:**
+  ```bash
+  sudo pacman -S python-gobject gtk3 libayatana-appindicator xorg-xrandr
+  ```
+
+Read the full [Linux Documentation](linux/README.md).
+
+---
+
+## 🎨 Eye Care & Circadian Tints (All Platforms)
+
+1. **Neutral Black:** Pure brightness reduction, zero color distortion.
+2. **Warm Amber:** Gentle night filter blocking aggressive blue wavelengths.
+3. **Candle Warm:** Cozy, ultra-low blue-light amber glow for late-night sessions.
+4. **Soft Green:** High-contrast soothing tint for reading documentation and code.
+
+---
+
+## 🛡️ Privacy & Security
+
+- **100% Offline & Private:** No telemetry, no background network calls, no analytics.
+- **Hardware-Safe:** Never alters physical display firmware, DDC/CI hardware registers, or dangerous backlight voltages.
+- **Fail-Safe:** Capped at 90% software darkness with hardware safety reset hotkeys to prevent pitch-black lockouts.
+
+---
+
+## 📄 License
+
+Distributed under the [MIT License](https://opensource.org/licenses/MIT).

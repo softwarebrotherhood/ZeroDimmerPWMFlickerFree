@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=FlickerFree PWM Dimmer
+Comment=Zero-PWM software screen dimmer for eye strain and headache prevention
+Exec=flickerfree-dimmer
+Icon=flickerfree-dimmer
+Terminal=false
+Type=Application
+Categories=Utility;Settings;HardwareSettings;
+Keywords=screen;dimmer;pwm;flicker;brightness;eyestrain;oled;
+StartupNotify=false

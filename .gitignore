@@ -21,3 +21,16 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# macOS build files
+.build/
+.DS_Store
+*.xcworkspace
+xcuserdata/
+
+# Linux package outputs
+*.tar.gz
