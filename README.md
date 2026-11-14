@@ -1,6 +1,6 @@
 # FlickerFree PWM Dimmer 🛡️🌙
 
-[![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe)
+[![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](windows/)
 [![macOS](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
 [![Linux](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -12,8 +12,8 @@
 
 | Platform | Download Package | Format | Architecture |
 | :--- | :--- | :--- | :--- |
-| **Windows** | [**Download Windows Installer**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
-| **Windows Portable** | [**Download Portable ZIP**](https://github.com/salamimarketer/FlikerFreePWMDimmer/tree/main/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
+| **Windows** | [**Download Windows Installer**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
+| **Windows Portable** | [**Download Portable ZIP**](https://github.com/salamimarketer/FlikerFreePWMDimmer/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
 | **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
 | **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
 
@@ -54,8 +54,10 @@ FlickerFree Dimmer (100%): ═════════════════�
 ## 🪟 Windows Version
 
 ### Installation
-- Download and run [**FlickerFreeDimmer_Setup_v1.0.0.exe**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe).
+- Download and run [**FlickerFreeDimmer_Setup_v1.0.0.exe**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe).
 - Installs to local app data (no admin rights needed), creates Desktop & Start Menu shortcuts.
+
+Read the full [Windows Documentation](windows/README.md).
 
 ### Global Hotkeys
 - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↓</kbd> : Darken screen (+5%)

@@ -32,22 +32,24 @@ jobs:
 
       - name: Build & Publish WPF App
         run: |
+          cd windows
           dotnet publish AntiFlickerDimmer.csproj -c Release -r win-x64 --self-contained false -o bin/Release/net9.0-windows/publish /p:DebugType=none /p:DebugSymbols=false /p:PathMap="${{ github.workspace }}=/_"
 
       - name: Compile Inno Setup Installer
         run: |
+          cd windows
           iscc installer.iss
 
       - name: Zip Standalone Release
         shell: pwsh
         run: |
-          Compress-Archive -Path bin/Release/net9.0-windows/publish/* -DestinationPath FlickerFreeDimmer-Windows-Portable.zip
+          Compress-Archive -Path windows/bin/Release/net9.0-windows/publish/* -DestinationPath FlickerFreeDimmer-Windows-Portable.zip
 
       - name: Upload Windows Setup Artifact
         uses: actions/upload-artifact@v4
         with:
           name: FlickerFreeDimmer-Windows-Setup
-          path: bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe
+          path: windows/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe
 
       - name: Upload Windows Portable Artifact
         uses: actions/upload-artifact@v4

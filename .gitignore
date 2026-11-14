@@ -1,6 +1,9 @@
 # Ignore compiler intermediates and debug builds
 obj/
+windows/obj/
 bin/Debug/
+windows/bin/Debug/
+**/win-x64/
 
 # Visual Studio / Rider / VSCode caches
 .vs/
