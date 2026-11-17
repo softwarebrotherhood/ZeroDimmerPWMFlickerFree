@@ -155,6 +155,24 @@ public struct ContentView: View {
                     .lineLimit(2)
             }
 
+            // Ko-fi Support Button
+            Link(destination: URL(string: "https://ko-fi.com/softwarebrotherhood")!) {
+                HStack(spacing: 6) {
+                    Text("☕")
+                    Text("Support on Ko-fi")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+                .background(Color(red: 1.0, green: 0.37, blue: 0.36).opacity(0.18))
+                .foregroundColor(Color(red: 1.0, green: 0.50, blue: 0.50))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(red: 1.0, green: 0.37, blue: 0.36).opacity(0.4), lineWidth: 1)
+                )
+                .cornerRadius(6)
+            }
+
             Divider().background(Color.gray.opacity(0.3))
 
             // Footer & Hotkey note

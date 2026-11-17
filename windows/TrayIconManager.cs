@@ -68,6 +68,20 @@ public class TrayIconManager : IDisposable
         };
         menu.Items.Add(_startWithWindowsItem);
 
+        var kofiItem = new ToolStripMenuItem("Support on Ko-fi ☕", null, (s, e) =>
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://ko-fi.com/softwarebrotherhood",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
+        });
+        menu.Items.Add(kofiItem);
+
         menu.Items.Add(new ToolStripSeparator());
 
         var exitItem = new ToolStripMenuItem("Exit Dimmer", null, (s, e) => OnExitRequested?.Invoke());

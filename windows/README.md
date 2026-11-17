@@ -1,5 +1,7 @@
 # FlickerFree PWM Dimmer for Windows
 
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
+
 Zero-PWM software screen dimmer for Windows 10 (Build 1607+) and Windows 11.
 
 Eliminates eye strain, headaches, and migraines caused by Pulse-Width Modulation (PWM) backlight flickering on laptops and external displays by keeping hardware backlight at 100% constant DC and dimming pixels via the Windows Desktop Window Manager (DWM) composition pipeline.

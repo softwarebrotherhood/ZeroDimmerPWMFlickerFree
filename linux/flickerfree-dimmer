@@ -11,6 +11,7 @@ import signal
 import subprocess
 import atexit
 import re
+import webbrowser
 
 import gi
 try:
@@ -261,6 +262,19 @@ button.tint-active {
     border: 1px solid #06B6D4;
     color: #38BDF8;
 }
+button.kofi-btn {
+    background: #3B1B1B;
+    color: #F87171;
+    border: 1px solid #7F1D1D;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+button.kofi-btn:hover {
+    background: #FF5E5B;
+    color: #FFFFFF;
+}
 """
 
 
@@ -391,10 +405,15 @@ class MainWindow(Gtk.Window):
 
         # Footer
         footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-        info_lbl = Gtk.Label(label="Hardware Backlight: 100% Constant DC")
+        info_lbl = Gtk.Label(label="Backlight: 100% DC")
         info_lbl.get_style_context().add_class("subtitle")
         info_lbl.set_xalign(0)
         footer_box.pack_start(info_lbl, True, True, 0)
+
+        kofi_btn = Gtk.Button(label="Support ☕")
+        kofi_btn.get_style_context().add_class("kofi-btn")
+        kofi_btn.connect("clicked", lambda _: webbrowser.open("https://ko-fi.com/softwarebrotherhood"))
+        footer_box.pack_start(kofi_btn, False, False, 0)
 
         quit_btn = Gtk.Button(label="Quit")
         quit_btn.get_style_context().add_class("preset-btn")
@@ -466,6 +485,10 @@ class App:
             item_reset = Gtk.MenuItem(label="Reset to 0% (Off)")
             item_reset.connect("activate", lambda _: self.win.scale.set_value(0))
             menu.append(item_reset)
+
+            item_kofi = Gtk.MenuItem(label="Support on Ko-fi ☕")
+            item_kofi.connect("activate", lambda _: webbrowser.open("https://ko-fi.com/softwarebrotherhood"))
+            menu.append(item_kofi)
 
             item_quit = Gtk.MenuItem(label="Quit")
             item_quit.connect("activate", self.quit_app)

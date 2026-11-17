@@ -1,5 +1,7 @@
 # FlickerFree PWM Dimmer for Linux
 
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
+
 Zero-PWM software screen dimmer for Linux desktops (Ubuntu, Debian, Fedora, Arch, Linux Mint, Pop!_OS, etc.).
 
 Eliminates eye strain, headaches, and migraines caused by Pulse-Width Modulation (PWM) backlight flickering on laptops and desktop monitors by keeping hardware backlight at 100% constant DC and dimming pixels purely in software.

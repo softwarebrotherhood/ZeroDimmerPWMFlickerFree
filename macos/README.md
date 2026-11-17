@@ -1,5 +1,7 @@
 # FlickerFree PWM Dimmer for macOS
 
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
+
 Zero-PWM software screen dimmer for Apple Silicon (M1/M2/M3/M4) and Intel Macs running macOS 12 Monterey or newer.
 
 Eliminates eye strain, headaches, and migraines caused by PWM (Pulse-Width Modulation) backlight strobing on MacBook Liquid Retina XDR (mini-LED) and OLED/IPS screens by keeping the hardware backlight at 100% constant DC and dimming pixels via CoreGraphics gamma tables or screen overlays.

@@ -252,12 +252,27 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- Card 6: Support & Ko-fi -->
+                    <Border Background="#1C1917" BorderBrush="#78350F" BorderThickness="1" CornerRadius="12" Padding="14" Margin="0,0,0,12">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <TextBlock Text="☕" FontSize="14" Margin="0,0,6,0"/>
+                                <TextBlock Text="SUPPORT THE DEVELOPER" FontSize="10" FontWeight="Bold" Foreground="#F59E0B" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#D6D3D1" Margin="0,0,0,10" LineHeight="16">
+                                If FlickerFree Dimmer has saved your eyes, eliminated screen headaches, or boosted your comfort, consider supporting on Ko-fi!
+                            </TextBlock>
+                            <Button Content="❤️ Support on Ko-fi (ko-fi.com/softwarebrotherhood)" Click="OnSupportKofiClick" Style="{StaticResource ModernButton}" Background="#FF5E5B" Foreground="#FFFFFF" HorizontalAlignment="Left" Padding="14,7"/>
+                        </StackPanel>
+                    </Border>
+
                 </StackPanel>
             </ScrollViewer>
 
             <!-- Footer -->
             <Grid Grid.Row="2" Margin="0,12,0,0">
                 <Button Content="Hide to Tray" Click="OnCloseToTrayClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Left" Background="#1E293B" Foreground="#94A3B8" Padding="14,6"/>
+                <Button Content="☕ Support on Ko-fi" Click="OnSupportKofiClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Center" Background="#FF5E5B" Foreground="#FFFFFF" Padding="14,6"/>
                 <Button Content="Quit Dimmer" Click="OnQuitClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Right" Background="#7F1D1D" Foreground="#FECACA" Padding="14,6"/>
             </Grid>
         </Grid>

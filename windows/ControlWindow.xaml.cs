@@ -375,6 +375,19 @@ public partial class ControlWindow : Window
         }
     }
 
+    private void OnSupportKofiClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://ko-fi.com/softwarebrotherhood",
+                UseShellExecute = true
+            });
+        }
+        catch { }
+    }
+
     private void OnQuitClick(object sender, RoutedEventArgs e)
     {
         PerformExit();

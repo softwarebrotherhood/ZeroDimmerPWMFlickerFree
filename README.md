@@ -3,6 +3,7 @@
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](windows/)
 [![macOS](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
 [![Linux](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions/workflows/build-all.yml/badge.svg)](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions)
 
@@ -16,6 +17,8 @@
 | **Windows Portable** | [**Download Portable ZIP**](https://github.com/salamimarketer/FlikerFreePWMDimmer/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
 | **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
 | **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
+
+> ☕ **Enjoying comfortable, flicker-free screens?** Support ongoing multi-platform development on **[Ko-fi: ko-fi.com/softwarebrotherhood](https://ko-fi.com/softwarebrotherhood)**!
 
 ---
 
@@ -138,6 +141,18 @@ Read the full [Linux Documentation](linux/README.md).
 - **100% Offline & Private:** No telemetry, no background network calls, no analytics.
 - **Hardware-Safe:** Never alters physical display firmware, DDC/CI hardware registers, or dangerous backlight voltages.
 - **Fail-Safe:** Capped at 90% software darkness with hardware safety reset hotkeys to prevent pitch-black lockouts.
+
+---
+
+## 💖 Support & Sponsorship
+
+If **FlickerFree Dimmer** has saved your eyes from PWM screen strobing, relieved migraines, or improved your daily working comfort, please consider buying a coffee or becoming a supporter!
+
+[![Support on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/softwarebrotherhood)
+
+Direct Link: **[ko-fi.com/softwarebrotherhood](https://ko-fi.com/softwarebrotherhood)**
+
+Your support directly funds continued maintenance, multi-platform releases (Windows, macOS, Linux), and free community updates.
 
 ---
 
