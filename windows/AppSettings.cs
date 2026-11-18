@@ -23,6 +23,9 @@ public class AppSettings
     public bool ShowOsd { get; set; } = true;
     public int MaxDimLevel { get; set; } = 90;
     public string ThemeMode { get; set; } = "System"; // "System", "Dark", "Light"
+    public double WindowLeft { get; set; } = -1;
+    public double WindowTop { get; set; } = -1;
+    public bool AllowWindowMove { get; set; } = true;
 
     public static AppSettings Load()
     {

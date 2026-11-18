@@ -4,7 +4,7 @@
         Title="FlickerFree Dimmer"
         Width="410"
         Height="495"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="False"
         Background="{DynamicResource BrushWindowBg}"
@@ -318,7 +318,7 @@
             </Grid.RowDefinitions>
 
             <!-- Fluent Title Bar (Draggable) -->
-            <Grid Grid.Row="0" MouseLeftButtonDown="OnTitleBarMouseDown" Background="Transparent" Margin="0,0,0,10">
+            <Grid x:Name="TitleBarGrid" Grid.Row="0" MouseLeftButtonDown="OnTitleBarMouseDown" Background="Transparent" Margin="0,0,0,10" Cursor="SizeAll">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="28" Height="28" CornerRadius="6" Background="Transparent" Margin="0,0,10,0" VerticalAlignment="Center">
                         <Image Source="app.png" Width="28" Height="28" RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -464,6 +464,16 @@
                                     <TextBlock Text="SYSTEM PREFERENCES" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
                                     <CheckBox x:Name="StartupCheckBox" Content="Start automatically with Windows" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,0,6" Checked="OnStartupCheckChanged" Unchecked="OnStartupCheckChanged"/>
                                     <CheckBox x:Name="ShowOsdCheckBox" Content="Show on-screen display (OSD) on hotkey" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Checked="OnShowOsdCheckChanged" Unchecked="OnShowOsdCheckChanged"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card: Window Mobility & Position -->
+                            <Border Style="{StaticResource CardBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="WINDOW MOBILITY &amp; POSITION" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="AllowMoveCheckBox" Content="Allow moving window (draggable)" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,0,4" IsChecked="True" Checked="OnAllowMoveCheckChanged" Unchecked="OnAllowMoveCheckChanged"/>
+                                    <TextBlock Text="Drag the top title bar to move the app anywhere on screen. Position is remembered." FontSize="10" Foreground="{DynamicResource BrushTextSecondary}" Margin="18,0,0,8" TextWrapping="Wrap" LineHeight="14"/>
+                                    <Button Content="📍 Reset Position to Bottom-Right" Click="OnResetPositionClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Left" Padding="12,5"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

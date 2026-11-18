@@ -36,6 +36,7 @@ public partial class ControlWindow : Window
 
         InitializeComponent();
 
+        RestoreOrSetDefaultPosition();
         LoadSettingsIntoUi();
         ApplyTheme();
         ApplyState();
@@ -119,6 +120,8 @@ public partial class ControlWindow : Window
         if (DimLevelText != null) DimLevelText.Text = $"{_settings.DimLevel}%";
         if (StartupCheckBox != null) StartupCheckBox.IsChecked = _settings.StartWithWindows;
         if (ShowOsdCheckBox != null) ShowOsdCheckBox.IsChecked = _settings.ShowOsd;
+        if (AllowMoveCheckBox != null) AllowMoveCheckBox.IsChecked = _settings.AllowWindowMove;
+        ApplyWindowMoveSetting();
 
         switch (_settings.TintMode)
         {
@@ -261,9 +264,12 @@ public partial class ControlWindow : Window
 
     private void OnTitleBarMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton == MouseButton.Left)
+        if (e.ChangedButton == MouseButton.Left && _settings.AllowWindowMove)
         {
             DragMove();
+            _settings.WindowLeft = Left;
+            _settings.WindowTop = Top;
+            _settings.Save();
         }
     }
 
@@ -274,6 +280,12 @@ public partial class ControlWindow : Window
 
     private void OnCloseToTrayClick(object sender, RoutedEventArgs e)
     {
+        if (WindowState == WindowState.Normal)
+        {
+            _settings.WindowLeft = Left;
+            _settings.WindowTop = Top;
+            _settings.Save();
+        }
         Hide();
     }
 
@@ -281,6 +293,12 @@ public partial class ControlWindow : Window
     {
         // Don't kill application when X is clicked: hide to tray so screen stays dimmed!
         e.Cancel = true;
+        if (WindowState == WindowState.Normal)
+        {
+            _settings.WindowLeft = Left;
+            _settings.WindowTop = Top;
+            _settings.Save();
+        }
         Hide();
     }
 
@@ -384,6 +402,23 @@ public partial class ControlWindow : Window
         if (_isUpdatingUi || _settings == null || ShowOsdCheckBox == null) return;
 
         _settings.ShowOsd = ShowOsdCheckBox.IsChecked == true;
+        _settings.Save();
+    }
+
+    private void OnAllowMoveCheckChanged(object sender, RoutedEventArgs e)
+    {
+        if (_isUpdatingUi || _settings == null || AllowMoveCheckBox == null) return;
+
+        _settings.AllowWindowMove = AllowMoveCheckBox.IsChecked == true;
+        ApplyWindowMoveSetting();
+        _settings.Save();
+    }
+
+    private void OnResetPositionClick(object sender, RoutedEventArgs e)
+    {
+        PositionWindowBottomRight();
+        _settings.WindowLeft = Left;
+        _settings.WindowTop = Top;
         _settings.Save();
     }
 
@@ -542,9 +577,64 @@ public partial class ControlWindow : Window
         return false;
     }
 
+    private void RestoreOrSetDefaultPosition()
+    {
+        WindowStartupLocation = WindowStartupLocation.Manual;
+
+        if (_settings.WindowLeft >= 0 && _settings.WindowTop >= 0 && IsPositionOnScreen(_settings.WindowLeft, _settings.WindowTop, Width, Height))
+        {
+            Left = _settings.WindowLeft;
+            Top = _settings.WindowTop;
+        }
+        else
+        {
+            PositionWindowBottomRight();
+        }
+    }
+
+    private void PositionWindowBottomRight()
+    {
+        var workArea = SystemParameters.WorkArea;
+        double w = double.IsNaN(Width) || Width <= 0 ? 410 : Width;
+        double h = double.IsNaN(Height) || Height <= 0 ? 495 : Height;
+        Left = Math.Max(workArea.Left, workArea.Right - w - 16);
+        Top = Math.Max(workArea.Top, workArea.Bottom - h - 16);
+    }
+
+    private static bool IsPositionOnScreen(double left, double top, double width, double height)
+    {
+        try
+        {
+            var windowRect = new System.Drawing.Rectangle((int)left, (int)top, (int)width, (int)height);
+            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                if (screen.WorkingArea.IntersectsWith(windowRect))
+                {
+                    return true;
+                }
+            }
+        }
+        catch { }
+        return false;
+    }
+
+    private void ApplyWindowMoveSetting()
+    {
+        if (TitleBarGrid != null)
+        {
+            TitleBarGrid.Cursor = _settings.AllowWindowMove ? System.Windows.Input.Cursors.SizeAll : System.Windows.Input.Cursors.Arrow;
+        }
+    }
+
     public void PerformExit()
     {
         Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+        if (WindowState == WindowState.Normal)
+        {
+            _settings.WindowLeft = Left;
+            _settings.WindowTop = Top;
+            _settings.Save();
+        }
         // Clean exit
         _overlayManager.Dispose();
         _trayManager.Dispose();
