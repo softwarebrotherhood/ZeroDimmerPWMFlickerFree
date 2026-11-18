@@ -1,11 +1,10 @@
-# FlickerFree PWM Dimmer 🛡️🌙
+# ZeroDimmer 🛡️🌙
 
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](windows/)
 [![macOS](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
 [![Linux](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Actions](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions/workflows/build-all.yml/badge.svg)](https://github.com/salamimarketer/FlikerFreePWMDimmer/actions)
 
 ---
 
@@ -13,8 +12,8 @@
 
 | Platform | Download Package | Format | Architecture |
 | :--- | :--- | :--- | :--- |
-| **Windows** | [**Download Windows Installer**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
-| **Windows Portable** | [**Download Portable ZIP**](https://github.com/salamimarketer/FlikerFreePWMDimmer/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
+| **Windows** | [**Download Windows Installer**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
+| **Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
 | **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
 | **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
 
@@ -31,12 +30,12 @@ Modern laptop screens and desktop monitors (OLED, mini-LED Liquid Retina XDR, an
 
 ```
 Hardware Dimming (<70%):   █   █   █   █   █   █   (PWM Backlight Strobing -> Eye Fatigue)
-FlickerFree Dimmer (100%): ═════════════════════════ (100% Constant DC Backlight + Software Dimming)
+ZeroDimmer (100% DC):      ═════════════════════════ (100% Constant DC Backlight + Software Dimming)
 ```
 
 ### 💡 The Solution
 1. Keep physical screen brightness at **100%** (via your keyboard brightness keys or system settings).
-2. Use **FlickerFree Dimmer** to dim pixels at the operating system compositor level.
+2. Use **ZeroDimmer** to dim pixels at the operating system compositor level.
 3. Enjoy a dark, comfortable screen with **0 Hz PWM flicker**!
 
 ---
@@ -57,7 +56,7 @@ FlickerFree Dimmer (100%): ═════════════════�
 ## 🪟 Windows Version
 
 ### Installation
-- Download and run [**FlickerFreeDimmer_Setup_v1.0.0.exe**](https://github.com/salamimarketer/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe).
+- Download and run [**ZeroDimmer_Setup_v1.0.0.exe**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
 - Installs to local app data (no admin rights needed), creates Desktop & Start Menu shortcuts.
 
 Read the full [Windows Documentation](windows/README.md).
@@ -87,7 +86,7 @@ Or generate the `.app` bundle:
 ```bash
 chmod +x build-app.sh
 ./build-app.sh
-open FlickerFreeDimmer.app
+open ZeroDimmer.app
 ```
 
 ### Hotkeys
@@ -146,7 +145,7 @@ Read the full [Linux Documentation](linux/README.md).
 
 ## 💖 Support & Sponsorship
 
-If **FlickerFree Dimmer** has saved your eyes from PWM screen strobing, relieved migraines, or improved your daily working comfort, please consider buying a coffee or becoming a supporter!
+If **ZeroDimmer** has saved your eyes from PWM screen strobing, relieved migraines, or improved your daily working comfort, please consider buying a coffee or becoming a supporter!
 
 [![Support on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/softwarebrotherhood)
 

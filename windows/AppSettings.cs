@@ -9,10 +9,13 @@ public class AppSettings
 {
     private static readonly string AppDataFolder = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "ZeroDimmer");
+    private static readonly string LegacyAppDataFolder = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "AntiFlickerDimmer");
     private static readonly string ConfigFilePath = Path.Combine(AppDataFolder, "settings.json");
     private const string StartupRegistryKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string AppRegistryName = "AntiFlickerDimmer";
+    private const string AppRegistryName = "ZeroDimmer";
 
     public int DimLevel { get; set; } = 35; // 0 - 90 %
     public bool IsEnabled { get; set; } = true;
@@ -31,6 +34,17 @@ public class AppSettings
     {
         try
         {
+            // Auto-migrate settings from legacy path if new settings don't exist yet
+            if (!File.Exists(ConfigFilePath))
+            {
+                var legacyPath = Path.Combine(LegacyAppDataFolder, "settings.json");
+                if (File.Exists(legacyPath))
+                {
+                    if (!Directory.Exists(AppDataFolder)) Directory.CreateDirectory(AppDataFolder);
+                    File.Copy(legacyPath, ConfigFilePath, true);
+                }
+            }
+
             if (File.Exists(ConfigFilePath))
             {
                 var json = File.ReadAllText(ConfigFilePath);

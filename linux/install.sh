@@ -9,16 +9,16 @@ ICON_DIR="${HOME}/.local/share/icons/hicolor/256x256/apps"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ "$1" == "--uninstall" ]; then
-    echo "=== Uninstalling FlickerFree PWM Dimmer ==="
-    rm -f "${BIN_DIR}/flickerfree-dimmer"
-    rm -f "${APP_DIR}/flickerfree-dimmer.desktop"
-    rm -f "${ICON_DIR}/flickerfree-dimmer.png"
+    echo "=== Uninstalling ZeroDimmer ==="
+    rm -f "${BIN_DIR}/zerodimmer"
+    rm -f "${APP_DIR}/zerodimmer.desktop"
+    rm -f "${ICON_DIR}/zerodimmer.png"
     echo "Uninstalled successfully."
     exit 0
 fi
 
 echo "========================================="
-echo " Installing FlickerFree PWM Dimmer       "
+echo " Installing ZeroDimmer                   "
 echo " Zero PWM Flicker Screen Dimmer for Linux"
 echo "========================================="
 
@@ -28,20 +28,20 @@ mkdir -p "${APP_DIR}"
 mkdir -p "${ICON_DIR}"
 
 # Copy binary & assets
-echo "[1/4] Installing executable to ${BIN_DIR}/flickerfree-dimmer..."
-cp "${SCRIPT_DIR}/flickerfree-dimmer" "${BIN_DIR}/flickerfree-dimmer"
-chmod +x "${BIN_DIR}/flickerfree-dimmer"
+echo "[1/4] Installing executable to ${BIN_DIR}/zerodimmer..."
+cp "${SCRIPT_DIR}/zerodimmer" "${BIN_DIR}/zerodimmer"
+chmod +x "${BIN_DIR}/zerodimmer"
 
 echo "[2/4] Installing high-res application icon..."
 if [ -f "${SCRIPT_DIR}/app.png" ]; then
-    cp "${SCRIPT_DIR}/app.png" "${ICON_DIR}/flickerfree-dimmer.png"
+    cp "${SCRIPT_DIR}/app.png" "${ICON_DIR}/zerodimmer.png"
 elif [ -f "${SCRIPT_DIR}/../app.png" ]; then
-    cp "${SCRIPT_DIR}/../app.png" "${ICON_DIR}/flickerfree-dimmer.png"
+    cp "${SCRIPT_DIR}/../app.png" "${ICON_DIR}/zerodimmer.png"
 fi
 
 echo "[3/4] Installing desktop entry..."
-cp "${SCRIPT_DIR}/flickerfree-dimmer.desktop" "${APP_DIR}/flickerfree-dimmer.desktop"
-chmod +x "${APP_DIR}/flickerfree-dimmer.desktop"
+cp "${SCRIPT_DIR}/zerodimmer.desktop" "${APP_DIR}/zerodimmer.desktop"
+chmod +x "${APP_DIR}/zerodimmer.desktop"
 
 # Refresh system caches
 if command -v update-desktop-database >/dev/null 2>&1; then

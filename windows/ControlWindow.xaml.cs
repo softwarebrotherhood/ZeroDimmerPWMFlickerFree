@@ -57,7 +57,7 @@ public partial class ControlWindow : Window
             App.Log($"ControlWindow OnSourceInitialized with HWND: {hwnd}");
             _hotkeyManager.Initialize(hwnd);
 
-            _showWindowMsg = NativeMethods.RegisterWindowMessage("AntiFlickerDimmer_ShowWindow_Msg");
+            _showWindowMsg = NativeMethods.RegisterWindowMessage("ZeroDimmer_ShowWindow_Msg");
             var source = HwndSource.FromHwnd(hwnd);
             source?.AddHook(WndProc);
 
@@ -73,7 +73,7 @@ public partial class ControlWindow : Window
     {
         if (msg == _showWindowMsg && _showWindowMsg != 0)
         {
-            App.Log("Received AntiFlickerDimmer_ShowWindow_Msg broadcast! Bringing window to front.");
+            App.Log("Received ZeroDimmer_ShowWindow_Msg broadcast! Bringing window to front.");
             ShowAndActivate();
             handled = true;
         }
@@ -438,8 +438,8 @@ public partial class ControlWindow : Window
             p?.WaitForExit();
 
             System.Windows.Forms.MessageBox.Show(
-                "Success! Administrator (UAC) prompts will now appear directly on your desktop and be completely dimmed by FlickerFree Dimmer.",
-                "FlickerFree Dimmer",
+                "Success! Administrator (UAC) prompts will now appear directly on your desktop and be completely dimmed by ZeroDimmer.",
+                "ZeroDimmer",
                 System.Windows.Forms.MessageBoxButtons.OK,
                 System.Windows.Forms.MessageBoxIcon.Information);
         }
@@ -447,7 +447,7 @@ public partial class ControlWindow : Window
         {
             System.Windows.Forms.MessageBox.Show(
                 "Unable to apply setting:\n" + ex.Message + "\n\nYou can also run 'Fix-UAC-Dimming.bat' as administrator.",
-                "FlickerFree Dimmer",
+                "ZeroDimmer",
                 System.Windows.Forms.MessageBoxButtons.OK,
                 System.Windows.Forms.MessageBoxIcon.Warning);
         }

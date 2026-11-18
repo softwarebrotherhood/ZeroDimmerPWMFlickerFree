@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "FlickerFreeDimmer",
+    name: "ZeroDimmer",
     platforms: [
         .macOS(.v12)
     ],
     products: [
-        .executable(name: "FlickerFreeDimmer", targets: ["FlickerFreeDimmer"])
+        .executable(name: "ZeroDimmer", targets: ["ZeroDimmer"])
     ],
     targets: [
         .executableTarget(
-            name: "FlickerFreeDimmer",
+            name: "ZeroDimmer",
             path: "Sources"
         )
     ]

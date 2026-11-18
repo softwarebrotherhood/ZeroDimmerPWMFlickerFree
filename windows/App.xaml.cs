@@ -14,7 +14,7 @@ public partial class App : System.Windows.Application
 
     private static readonly string LogFile = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "AntiFlickerDimmer", "debug.log");
+        "ZeroDimmer", "debug.log");
 
     public static void Log(string message)
     {
@@ -65,7 +65,7 @@ public partial class App : System.Windows.Application
             Log($"FATAL AppDomain UnhandledException: {ex}");
             System.Windows.Forms.MessageBox.Show(
                 $"Unexpected Error:\n{ex?.Message}\n\n{ex?.StackTrace}",
-                "FlickerFree Dimmer - Error",
+                "ZeroDimmer - Error",
                 System.Windows.Forms.MessageBoxButtons.OK,
                 System.Windows.Forms.MessageBoxIcon.Error);
         };
@@ -75,7 +75,7 @@ public partial class App : System.Windows.Application
             Log($"UI DispatcherUnhandledException: {args.Exception}");
             System.Windows.Forms.MessageBox.Show(
                 $"UI Error:\n{args.Exception.Message}\n\n{args.Exception.StackTrace}",
-                "FlickerFree Dimmer - Error",
+                "ZeroDimmer - Error",
                 System.Windows.Forms.MessageBoxButtons.OK,
                 System.Windows.Forms.MessageBoxIcon.Error);
             args.Handled = true;
@@ -131,7 +131,7 @@ public partial class App : System.Windows.Application
         {
             Log("Showing tray notification...");
             _trayManager.ShowNotification(
-                "FlickerFree Dimmer Active",
+                "ZeroDimmer Active",
                 "Use Ctrl+Alt+Down to dim, Ctrl+Alt+Up to brighten, or click the tray icon.");
             Log("Tray notification shown.");
         }

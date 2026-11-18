@@ -27,12 +27,12 @@ public class TrayIconManager : IDisposable
         _notifyIcon = new NotifyIcon
         {
             Visible = true,
-            Text = "FlickerFree Dimmer"
+            Text = "ZeroDimmer"
         };
 
         var menu = new ContextMenuStrip();
 
-        var titleItem = new ToolStripMenuItem("FlickerFree Dimmer")
+        var titleItem = new ToolStripMenuItem("ZeroDimmer")
         {
             Enabled = false,
             Font = new Font(Control.DefaultFont, FontStyle.Bold)
@@ -107,8 +107,8 @@ public class TrayIconManager : IDisposable
         _startWithWindowsItem.Checked = startWithWindows;
 
         string tooltip = isEnabled && level > 0
-            ? $"FlickerFree Dimmer: {level}% (Active)"
-            : "FlickerFree Dimmer: Paused / Off";
+            ? $"ZeroDimmer: {level}% (Active)"
+            : "ZeroDimmer: Paused / Off";
 
         // NotifyIcon text max length is 63 characters
         _notifyIcon.Text = tooltip.Length > 63 ? tooltip[..63] : tooltip;

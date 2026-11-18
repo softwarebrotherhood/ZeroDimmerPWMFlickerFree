@@ -58,7 +58,7 @@ public struct ContentView: View {
                     .foregroundColor(.cyan)
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("FlickerFree Dimmer")
+                    Text("ZeroDimmer")
                         .font(.system(size: 13, weight: .bold))
                     Text("Zero PWM Flicker • macOS")
                         .font(.system(size: 9))

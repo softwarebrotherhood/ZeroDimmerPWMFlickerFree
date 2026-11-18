@@ -11,7 +11,7 @@ echo.
 echo =========================================================================
 echo  [SUCCESS] PromptOnSecureDesktop is now set to 0.
 echo  "Run as administrator" (UAC) prompts will now stay on your desktop
-echo  and will be 100%% DIMMED by FlickerFree Dimmer!
+echo  and will be 100%% DIMMED by ZeroDimmer!
 echo =========================================================================
 echo.
 pause
