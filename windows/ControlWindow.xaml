@@ -11,10 +11,11 @@
         ResizeMode="NoResize"
         ShowInTaskbar="True"
         Topmost="True"
+        FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif"
         Icon="app.ico">
 
     <Window.Resources>
-        <!-- Modern Button Style -->
+        <!-- Windows Fluent Button Style -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="#334155"/>
             <Setter Property="Foreground" Value="#F8FAFC"/>
@@ -42,6 +43,58 @@
                     <Setter Property="Background" Value="#1E293B"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <!-- Windows Native Caption Buttons (Minimize & Close) -->
+        <Style x:Key="CaptionButton" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol, Arial"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#334155"/>
+                                <Setter Property="Foreground" Value="#F8FAFC"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#1E293B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CloseCaptionButton" TargetType="Button" BasedOn="{StaticResource CaptionButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#E81123"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="#C42B1C"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Quick Preset Chip Button Style -->
@@ -74,7 +127,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Standard Card Border -->
+        <!-- Standard Fluent Card Border -->
         <Style x:Key="CardBorder" TargetType="Border">
             <Setter Property="Background" Value="#1E293B"/>
             <Setter Property="BorderBrush" Value="#334155"/>
@@ -84,7 +137,7 @@
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
 
-        <!-- Modern Dark ScrollBar Styles (Integrated with App Theme) -->
+        <!-- Modern Dark ScrollBar Styles -->
         <Style x:Key="ScrollBarTrackButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -149,7 +202,7 @@
             </Setter>
         </Style>
 
-        <!-- Modern Top Tab Bar Styles -->
+        <!-- Windows Fluent Segmented Top Tab Bar Styles -->
         <Style x:Key="ModernTabItem" TargetType="{x:Type TabItem}">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Foreground" Value="#94A3B8"/>
@@ -241,7 +294,7 @@
                 <RowDefinition Height="Auto"/> <!-- Footer -->
             </Grid.RowDefinitions>
 
-            <!-- Title Bar (Draggable) -->
+            <!-- Fluent Title Bar (Draggable) -->
             <Grid Grid.Row="0" MouseLeftButtonDown="OnTitleBarMouseDown" Background="Transparent" Margin="0,0,0,10">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="28" Height="28" CornerRadius="6" Background="Transparent" Margin="0,0,10,0" VerticalAlignment="Center">
@@ -253,13 +306,13 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Window Control Buttons -->
+                <!-- Windows Native Caption Buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Width="28" Height="28" Click="OnMinimizeClick" Style="{StaticResource ModernButton}" Background="Transparent" Padding="0" Margin="0,0,4,0" ToolTip="Minimize to Tray">
-                        <TextBlock Text="—" Foreground="#94A3B8" FontWeight="Bold" FontSize="12"/>
+                    <Button Click="OnMinimizeClick" Style="{StaticResource CaptionButton}" ToolTip="Minimize to Tray" Margin="0,0,4,0">
+                        <TextBlock Text="&#xE921;" FontWeight="Normal" FontSize="10"/>
                     </Button>
-                    <Button Width="28" Height="28" Click="OnCloseToTrayClick" Style="{StaticResource ModernButton}" Background="Transparent" Padding="0" ToolTip="Close to Tray (Keeps Dimmer Running)">
-                        <TextBlock Text="✕" Foreground="#94A3B8" FontWeight="Bold" FontSize="12"/>
+                    <Button Click="OnCloseToTrayClick" Style="{StaticResource CloseCaptionButton}" ToolTip="Close to Tray (Keeps Dimmer Running)">
+                        <TextBlock Text="&#xE8BB;" FontWeight="Normal" FontSize="10"/>
                     </Button>
                 </StackPanel>
             </Grid>
