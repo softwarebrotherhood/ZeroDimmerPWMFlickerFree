@@ -37,6 +37,7 @@ public partial class ControlWindow : Window
         InitializeComponent();
 
         LoadSettingsIntoUi();
+        ApplyTheme();
         ApplyState();
         SetupEventHandlers();
 
@@ -97,6 +98,17 @@ public partial class ControlWindow : Window
         _hotkeyManager.OnDimUpRequested += () => Dispatcher.Invoke(() => AdjustDimLevel(-5));
         _hotkeyManager.OnToggleRequested += () => Dispatcher.Invoke(TogglePower);
         _hotkeyManager.OnResetRequested += () => Dispatcher.Invoke(() => SetDimLevel(0));
+
+        // System theme changed callback
+        Microsoft.Win32.SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
+    }
+
+    private void OnUserPreferenceChanged(object? sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
+    {
+        if (_settings?.ThemeMode == "System")
+        {
+            Dispatcher.Invoke(ApplyTheme);
+        }
     }
 
     private void LoadSettingsIntoUi()
@@ -131,6 +143,19 @@ public partial class ControlWindow : Window
         else
         {
             if (ModeDwmRadio != null) ModeDwmRadio.IsChecked = true;
+        }
+
+        switch (_settings.ThemeMode)
+        {
+            case "Dark":
+                if (ThemeDarkRadio != null) ThemeDarkRadio.IsChecked = true;
+                break;
+            case "Light":
+                if (ThemeLightRadio != null) ThemeLightRadio.IsChecked = true;
+                break;
+            default:
+                if (ThemeSystemRadio != null) ThemeSystemRadio.IsChecked = true;
+                break;
         }
 
         UpdatePowerUi();
@@ -173,7 +198,10 @@ public partial class ControlWindow : Window
             StatusBadgeText.Foreground = new SolidColorBrush(MediaColor.FromRgb(74, 222, 128));
             PowerToggleButton.Background = new SolidColorBrush(MediaColor.FromRgb(185, 28, 28));
             PowerButtonText.Text = "Turn Off";
-            DimLevelText.Foreground = new SolidColorBrush(MediaColor.FromRgb(56, 189, 248));
+            if (Resources["BrushAccent"] is SolidColorBrush accentBrush)
+                DimLevelText.Foreground = accentBrush;
+            else
+                DimLevelText.Foreground = new SolidColorBrush(MediaColor.FromRgb(56, 189, 248));
         }
         else
         {
@@ -182,7 +210,10 @@ public partial class ControlWindow : Window
             StatusBadgeText.Foreground = new SolidColorBrush(MediaColor.FromRgb(248, 113, 113));
             PowerToggleButton.Background = new SolidColorBrush(MediaColor.FromRgb(2, 132, 199));
             PowerButtonText.Text = "Turn On";
-            DimLevelText.Foreground = new SolidColorBrush(MediaColor.FromRgb(148, 163, 184));
+            if (Resources["BrushTextSecondary"] is SolidColorBrush secBrush)
+                DimLevelText.Foreground = secBrush;
+            else
+                DimLevelText.Foreground = new SolidColorBrush(MediaColor.FromRgb(148, 163, 184));
         }
     }
 
@@ -327,6 +358,18 @@ public partial class ControlWindow : Window
         }
     }
 
+    private void OnThemeRadioChanged(object sender, RoutedEventArgs e)
+    {
+        if (_isUpdatingUi || _settings == null) return;
+
+        if (sender is WpfRadioButton rb && rb.IsChecked == true && rb.Tag is string mode)
+        {
+            _settings.ThemeMode = mode;
+            ApplyTheme();
+            _settings.Save();
+        }
+    }
+
     private void OnStartupCheckChanged(object sender, RoutedEventArgs e)
     {
         if (_isUpdatingUi || _settings == null || _trayManager == null || StartupCheckBox == null) return;
@@ -393,8 +436,115 @@ public partial class ControlWindow : Window
         PerformExit();
     }
 
+    private void ApplyTheme()
+    {
+        bool isLight;
+        if (_settings.ThemeMode == "Light")
+        {
+            isLight = true;
+        }
+        else if (_settings.ThemeMode == "Dark")
+        {
+            isLight = false;
+        }
+        else // "System"
+        {
+            isLight = IsWindowsInLightTheme();
+        }
+
+        if (isLight)
+        {
+            SetThemeBrush("BrushWindowBg", "#F1F5F9");
+            SetThemeBrush("BrushWindowBorder", "#0284C7");
+            SetThemeBrush("BrushCardBg", "#FFFFFF");
+            SetThemeBrush("BrushCardBorder", "#CBD5E1");
+            SetThemeBrush("BrushTextPrimary", "#0F172A");
+            SetThemeBrush("BrushTextSecondary", "#475569");
+            SetThemeBrush("BrushTextMuted", "#64748B");
+            SetThemeBrush("BrushAccent", "#0284C7");
+            SetThemeBrush("BrushTabContainer", "#E2E8F0");
+            SetThemeBrush("BrushTabContainerBorder", "#CBD5E1");
+            SetThemeBrush("BrushTabActiveBg", "#FFFFFF");
+            SetThemeBrush("BrushTabInactiveFg", "#64748B");
+            SetThemeBrush("BrushButtonBg", "#E2E8F0");
+            SetThemeBrush("BrushButtonHover", "#CBD5E1");
+            SetThemeBrush("BrushButtonFg", "#0F172A");
+            SetThemeBrush("BrushChipBg", "#F8FAFC");
+            SetThemeBrush("BrushChipBorder", "#CBD5E1");
+            SetThemeBrush("BrushChipFg", "#334155");
+            SetThemeBrush("BrushScrollThumb", "#CBD5E1");
+            SetThemeBrush("BrushTipCardBg", "#EFF6FF");
+            SetThemeBrush("BrushTipCardBorder", "#BFDBFE");
+            SetThemeBrush("BrushTipCardTitle", "#1D4ED8");
+            SetThemeBrush("BrushTipCardText", "#1E3A8A");
+            SetThemeBrush("BrushKofiCardBg", "#FFFBEB");
+            SetThemeBrush("BrushKofiCardBorder", "#FDE68A");
+            SetThemeBrush("BrushKofiCardTitle", "#B45309");
+            SetThemeBrush("BrushKofiCardText", "#78350F");
+        }
+        else
+        {
+            SetThemeBrush("BrushWindowBg", "#0F172A");
+            SetThemeBrush("BrushWindowBorder", "#38BDF8");
+            SetThemeBrush("BrushCardBg", "#1E293B");
+            SetThemeBrush("BrushCardBorder", "#334155");
+            SetThemeBrush("BrushTextPrimary", "#F8FAFC");
+            SetThemeBrush("BrushTextSecondary", "#94A3B8");
+            SetThemeBrush("BrushTextMuted", "#64748B");
+            SetThemeBrush("BrushAccent", "#38BDF8");
+            SetThemeBrush("BrushTabContainer", "#1E293B");
+            SetThemeBrush("BrushTabContainerBorder", "#334155");
+            SetThemeBrush("BrushTabActiveBg", "#0F172A");
+            SetThemeBrush("BrushTabInactiveFg", "#94A3B8");
+            SetThemeBrush("BrushButtonBg", "#334155");
+            SetThemeBrush("BrushButtonHover", "#475569");
+            SetThemeBrush("BrushButtonFg", "#F8FAFC");
+            SetThemeBrush("BrushChipBg", "#1E293B");
+            SetThemeBrush("BrushChipBorder", "#334155");
+            SetThemeBrush("BrushChipFg", "#CBD5E1");
+            SetThemeBrush("BrushScrollThumb", "#334155");
+            SetThemeBrush("BrushTipCardBg", "#172554");
+            SetThemeBrush("BrushTipCardBorder", "#1E40AF");
+            SetThemeBrush("BrushTipCardTitle", "#93C5FD");
+            SetThemeBrush("BrushTipCardText", "#BFDBFE");
+            SetThemeBrush("BrushKofiCardBg", "#1C1917");
+            SetThemeBrush("BrushKofiCardBorder", "#78350F");
+            SetThemeBrush("BrushKofiCardTitle", "#F59E0B");
+            SetThemeBrush("BrushKofiCardText", "#D6D3D1");
+        }
+
+        UpdatePowerUi();
+    }
+
+    private void SetThemeBrush(string key, string hex)
+    {
+        var color = (MediaColor)System.Windows.Media.ColorConverter.ConvertFromString(hex);
+        var brush = new SolidColorBrush(color);
+        brush.Freeze();
+        Resources[key] = brush;
+    }
+
+    private static bool IsWindowsInLightTheme()
+    {
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+            if (key != null)
+            {
+                var val = key.GetValue("AppsUseLightTheme");
+                if (val is int intVal)
+                {
+                    return intVal == 1;
+                }
+            }
+        }
+        catch { }
+        return false;
+    }
+
     public void PerformExit()
     {
+        Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
         // Clean exit
         _overlayManager.Dispose();
         _trayManager.Dispose();

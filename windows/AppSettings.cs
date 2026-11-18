@@ -22,6 +22,7 @@ public class AppSettings
     public bool StartWithWindows { get; set; } = false;
     public bool ShowOsd { get; set; } = true;
     public int MaxDimLevel { get; set; } = 90;
+    public string ThemeMode { get; set; } = "System"; // "System", "Dark", "Light"
 
     public static AppSettings Load()
     {

@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="FlickerFree Dimmer"
         Width="410"
-        Height="485"
+        Height="495"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="False"
-        Background="#0F172A"
+        Background="{DynamicResource BrushWindowBg}"
         ResizeMode="NoResize"
         ShowInTaskbar="True"
         Topmost="True"
@@ -15,10 +15,39 @@
         Icon="app.ico">
 
     <Window.Resources>
+        <!-- Theme SolidColorBrushes (Updated Dynamically) -->
+        <SolidColorBrush x:Key="BrushWindowBg" Color="#0F172A"/>
+        <SolidColorBrush x:Key="BrushWindowBorder" Color="#38BDF8"/>
+        <SolidColorBrush x:Key="BrushCardBg" Color="#1E293B"/>
+        <SolidColorBrush x:Key="BrushCardBorder" Color="#334155"/>
+        <SolidColorBrush x:Key="BrushTextPrimary" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="BrushTextSecondary" Color="#94A3B8"/>
+        <SolidColorBrush x:Key="BrushTextMuted" Color="#64748B"/>
+        <SolidColorBrush x:Key="BrushAccent" Color="#38BDF8"/>
+        <SolidColorBrush x:Key="BrushTabContainer" Color="#1E293B"/>
+        <SolidColorBrush x:Key="BrushTabContainerBorder" Color="#334155"/>
+        <SolidColorBrush x:Key="BrushTabActiveBg" Color="#0F172A"/>
+        <SolidColorBrush x:Key="BrushTabInactiveFg" Color="#94A3B8"/>
+        <SolidColorBrush x:Key="BrushButtonBg" Color="#334155"/>
+        <SolidColorBrush x:Key="BrushButtonHover" Color="#475569"/>
+        <SolidColorBrush x:Key="BrushButtonFg" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="BrushChipBg" Color="#1E293B"/>
+        <SolidColorBrush x:Key="BrushChipBorder" Color="#334155"/>
+        <SolidColorBrush x:Key="BrushChipFg" Color="#CBD5E1"/>
+        <SolidColorBrush x:Key="BrushScrollThumb" Color="#334155"/>
+        <SolidColorBrush x:Key="BrushTipCardBg" Color="#172554"/>
+        <SolidColorBrush x:Key="BrushTipCardBorder" Color="#1E40AF"/>
+        <SolidColorBrush x:Key="BrushTipCardTitle" Color="#93C5FD"/>
+        <SolidColorBrush x:Key="BrushTipCardText" Color="#BFDBFE"/>
+        <SolidColorBrush x:Key="BrushKofiCardBg" Color="#1C1917"/>
+        <SolidColorBrush x:Key="BrushKofiCardBorder" Color="#78350F"/>
+        <SolidColorBrush x:Key="BrushKofiCardTitle" Color="#F59E0B"/>
+        <SolidColorBrush x:Key="BrushKofiCardText" Color="#D6D3D1"/>
+
         <!-- Windows Fluent Button Style -->
         <Style x:Key="ModernButton" TargetType="Button">
-            <Setter Property="Background" Value="#334155"/>
-            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="Background" Value="{DynamicResource BrushButtonBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushButtonFg}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -27,22 +56,19 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
+                        <Border x:Name="BtnBorder" Background="{TemplateBinding Background}" 
                                 CornerRadius="6" 
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource BrushButtonHover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#475569"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#1E293B"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <!-- Windows Native Caption Buttons (Minimize & Close) -->
@@ -50,7 +76,7 @@
             <Setter Property="Width" Value="32"/>
             <Setter Property="Height" Value="26"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTextSecondary}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol, Arial"/>
             <Setter Property="FontSize" Value="10"/>
@@ -63,11 +89,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="BtnBorder" Property="Background" Value="#334155"/>
-                                <Setter Property="Foreground" Value="#F8FAFC"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="BtnBorder" Property="Background" Value="#1E293B"/>
+                                <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource BrushButtonBg}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -98,46 +121,49 @@
         </Style>
 
         <!-- Quick Preset Chip Button Style -->
-        <Style x:Key="PresetChip" TargetType="Button" BasedOn="{StaticResource ModernButton}">
-            <Setter Property="Background" Value="#1E293B"/>
-            <Setter Property="BorderBrush" Value="#334155"/>
+        <Style x:Key="PresetChip" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource BrushChipBg}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushChipBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="#CBD5E1"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushChipFg}"/>
             <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Padding" Value="8,5"/>
             <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
+                        <Border x:Name="ChipBorder" 
+                                Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5" 
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChipBorder" Property="Background" Value="{DynamicResource BrushAccent}"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#38BDF8"/>
-                    <Setter Property="Foreground" Value="#0F172A"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <!-- Standard Fluent Card Border -->
         <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background" Value="#1E293B"/>
-            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Background" Value="{DynamicResource BrushCardBg}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BrushCardBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="10"/>
             <Setter Property="Padding" Value="12"/>
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
 
-        <!-- Modern Dark ScrollBar Styles -->
+        <!-- Modern Dark/Light ScrollBar Styles -->
         <Style x:Key="ScrollBarTrackButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -159,17 +185,14 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Border x:Name="ThumbBorder"
-                                Background="#334155"
+                                Background="{DynamicResource BrushScrollThumb}"
                                 CornerRadius="3"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Margin="1,0,1,0"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ThumbBorder" Property="Background" Value="#38BDF8"/>
-                            </Trigger>
-                            <Trigger Property="IsDragging" Value="True">
-                                <Setter TargetName="ThumbBorder" Property="Background" Value="#0284C7"/>
+                                <Setter TargetName="ThumbBorder" Property="Background" Value="{DynamicResource BrushAccent}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -205,7 +228,7 @@
         <!-- Windows Fluent Segmented Top Tab Bar Styles -->
         <Style x:Key="ModernTabItem" TargetType="{x:Type TabItem}">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Foreground" Value="{DynamicResource BrushTabInactiveFg}"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -227,13 +250,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="TabBorder" Property="Background" Value="#334155"/>
-                                <Setter Property="Foreground" Value="#F8FAFC"/>
+                                <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource BrushButtonBg}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="TabBorder" Property="Background" Value="#0F172A"/>
-                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#0284C7"/>
-                                <Setter Property="Foreground" Value="#38BDF8"/>
+                                <Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource BrushTabActiveBg}"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource BrushAccent}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource BrushAccent}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -257,8 +280,8 @@
 
                             <!-- Modern Segmented Pill Tab Bar on TOP -->
                             <Border Grid.Row="0"
-                                    Background="#1E293B"
-                                    BorderBrush="#334155"
+                                    Background="{DynamicResource BrushTabContainer}"
+                                    BorderBrush="{DynamicResource BrushTabContainerBorder}"
                                     BorderThickness="1"
                                     CornerRadius="8"
                                     Padding="2"
@@ -281,8 +304,8 @@
     </Window.Resources>
 
     <!-- Main Container -->
-    <Border Background="#0F172A" 
-            BorderBrush="#38BDF8" 
+    <Border Background="{DynamicResource BrushWindowBg}" 
+            BorderBrush="{DynamicResource BrushWindowBorder}" 
             BorderThickness="2" 
             Padding="16,12,16,12"
             SnapsToDevicePixels="True">
@@ -301,8 +324,8 @@
                         <Image Source="app.png" Width="28" Height="28" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>
                     <StackPanel>
-                        <TextBlock Text="FlickerFree Dimmer" FontSize="14" FontWeight="Bold" Foreground="#F8FAFC"/>
-                        <TextBlock Text="Zero-Flicker PWM Screen Dimmer" FontSize="10" Foreground="#94A3B8"/>
+                        <TextBlock Text="FlickerFree Dimmer" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource BrushTextPrimary}"/>
+                        <TextBlock Text="Zero-Flicker PWM Screen Dimmer" FontSize="10" Foreground="{DynamicResource BrushTextSecondary}"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -332,21 +355,21 @@
                                     <!-- Master Switch Row -->
                                     <Grid Margin="0,0,0,12">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <TextBlock Text="Dimmer Status:" FontSize="12" FontWeight="SemiBold" Foreground="#CBD5E1" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Dimmer Status:" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource BrushTextPrimary}" VerticalAlignment="Center"/>
                                             <Border x:Name="StatusBadge" Background="#14532D" CornerRadius="5" Padding="6,2" Margin="8,0,0,0" VerticalAlignment="Center">
                                                 <TextBlock x:Name="StatusBadgeText" Text="ACTIVE" FontSize="10" FontWeight="Bold" Foreground="#4ADE80"/>
                                             </Border>
                                         </StackPanel>
                                         <Button x:Name="PowerToggleButton" Click="OnPowerToggleClick" Style="{StaticResource ModernButton}" Background="#0284C7" HorizontalAlignment="Right" Padding="12,5">
-                                            <TextBlock x:Name="PowerButtonText" Text="Turn Off" FontWeight="Bold" FontSize="11"/>
+                                            <TextBlock x:Name="PowerButtonText" Text="Turn Off" FontWeight="Bold" FontSize="11" Foreground="#FFFFFF"/>
                                         </Button>
                                     </Grid>
 
                                     <!-- Percentage & Stepper -->
                                     <Grid Margin="0,0,0,8">
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock x:Name="DimLevelText" Text="35%" FontSize="30" FontWeight="ExtraBold" Foreground="#38BDF8"/>
-                                            <TextBlock Text="Software Darkness Overlay" FontSize="10" Foreground="#64748B"/>
+                                            <TextBlock x:Name="DimLevelText" Text="35%" FontSize="30" FontWeight="ExtraBold" Foreground="{DynamicResource BrushAccent}"/>
+                                            <TextBlock Text="Software Darkness Overlay" FontSize="10" Foreground="{DynamicResource BrushTextMuted}"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                             <Button Width="32" Height="32" Click="OnDecrementDimClick" Style="{StaticResource ModernButton}" Content="-" FontSize="16" Margin="0,0,6,0"/>
@@ -366,7 +389,7 @@
                                             Height="22"/>
 
                                     <!-- Quick Presets -->
-                                    <TextBlock Text="QUICK PRESETS" FontSize="9" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,5"/>
+                                    <TextBlock Text="QUICK PRESETS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,5"/>
                                     <UniformGrid Columns="5" Margin="0,0,0,2">
                                         <Button Content="Off (0%)" Style="{StaticResource PresetChip}" Click="OnPresetClick" Tag="0"/>
                                         <Button Content="20%" Style="{StaticResource PresetChip}" Click="OnPresetClick" Tag="20"/>
@@ -380,9 +403,9 @@
                             <!-- Card 2: Tint & Color Mode -->
                             <Border Style="{StaticResource CardBorder}">
                                 <StackPanel>
-                                    <TextBlock Text="EYE CARE &amp; NIGHT TINT" FontSize="9" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,6"/>
+                                    <TextBlock Text="EYE CARE &amp; NIGHT TINT" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
                                     <UniformGrid Columns="2" Rows="2">
-                                        <RadioButton x:Name="TintBlackRadio" Content="Neutral Black" GroupName="TintGroup" Foreground="#F8FAFC" FontSize="11" Margin="0,0,8,6" IsChecked="True" Checked="OnTintRadioChanged" Tag="NeutralBlack"/>
+                                        <RadioButton x:Name="TintBlackRadio" Content="Neutral Black" GroupName="TintGroup" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,8,6" IsChecked="True" Checked="OnTintRadioChanged" Tag="NeutralBlack"/>
                                         <RadioButton x:Name="TintAmberRadio" Content="Warm Amber" GroupName="TintGroup" Foreground="#F59E0B" FontSize="11" Margin="0,0,0,6" Checked="OnTintRadioChanged" Tag="WarmAmber"/>
                                         <RadioButton x:Name="TintCandleRadio" Content="Cozy Candle" GroupName="TintGroup" Foreground="#F97316" FontSize="11" Margin="0,0,8,2" Checked="OnTintRadioChanged" Tag="Candle"/>
                                         <RadioButton x:Name="TintGreenRadio" Content="Soft Green" GroupName="TintGroup" Foreground="#10B981" FontSize="11" Margin="0,0,0,2" Checked="OnTintRadioChanged" Tag="SoftGreen"/>
@@ -399,13 +422,25 @@
                 <TabItem Header="⚙️ System" Style="{StaticResource ModernTabItem}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
                         <StackPanel>
+                            <!-- Card: App Appearance / Theme -->
+                            <Border Style="{StaticResource CardBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="APP THEME &amp; APPEARANCE" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
+                                    <UniformGrid Columns="3">
+                                        <RadioButton x:Name="ThemeSystemRadio" Content="System (Auto)" GroupName="ThemeGroup" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,4,0" IsChecked="True" Checked="OnThemeRadioChanged" Tag="System"/>
+                                        <RadioButton x:Name="ThemeDarkRadio" Content="Dark Mode" GroupName="ThemeGroup" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,4,0" Checked="OnThemeRadioChanged" Tag="Dark"/>
+                                        <RadioButton x:Name="ThemeLightRadio" Content="Light Mode" GroupName="ThemeGroup" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,0,0" Checked="OnThemeRadioChanged" Tag="Light"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
                             <!-- Card: Dimming Scope & Taskbar Coverage -->
                             <Border Style="{StaticResource CardBorder}">
                                 <StackPanel>
-                                    <TextBlock Text="DIMMING ENGINE" FontSize="9" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,6"/>
-                                    <RadioButton x:Name="ModeDwmRadio" Content="Full Desktop &amp; Taskbar (Recommended)" GroupName="MethodGroup" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="11" Margin="0,0,0,3" IsChecked="True" Checked="OnDimmerMethodChanged" Tag="Dwm"/>
-                                    <TextBlock Text="Dims entire display uniformly: Taskbar, Start Menu, right-click context menus, and popups. No bright leaks!" FontSize="10" Foreground="#94A3B8" Margin="18,0,0,8" TextWrapping="Wrap" LineHeight="14"/>
-                                    <RadioButton x:Name="ModeOverlayRadio" Content="Classic Window Overlay Only" GroupName="MethodGroup" Foreground="#CBD5E1" FontSize="11" Margin="0,0,0,2" Checked="OnDimmerMethodChanged" Tag="Overlay"/>
+                                    <TextBlock Text="DIMMING ENGINE" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
+                                    <RadioButton x:Name="ModeDwmRadio" Content="Full Desktop &amp; Taskbar (Recommended)" GroupName="MethodGroup" Foreground="{DynamicResource BrushAccent}" FontWeight="SemiBold" FontSize="11" Margin="0,0,0,3" IsChecked="True" Checked="OnDimmerMethodChanged" Tag="Dwm"/>
+                                    <TextBlock Text="Dims entire display uniformly: Taskbar, Start Menu, right-click context menus, and popups. No bright leaks!" FontSize="10" Foreground="{DynamicResource BrushTextSecondary}" Margin="18,0,0,8" TextWrapping="Wrap" LineHeight="14"/>
+                                    <RadioButton x:Name="ModeOverlayRadio" Content="Classic Window Overlay Only" GroupName="MethodGroup" Foreground="{DynamicResource BrushTextSecondary}" FontSize="11" Margin="0,0,0,2" Checked="OnDimmerMethodChanged" Tag="Overlay"/>
                                 </StackPanel>
                             </Border>
 
@@ -414,21 +449,21 @@
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                         <TextBlock Text="🔒" FontSize="12" Margin="0,0,5,0"/>
-                                        <TextBlock Text="DIM 'RUN AS ADMIN' POPUPS" FontSize="9" FontWeight="Bold" Foreground="#64748B" VerticalAlignment="Center"/>
+                                        <TextBlock Text="DIM 'RUN AS ADMIN' POPUPS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" VerticalAlignment="Center"/>
                                     </StackPanel>
-                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="#94A3B8" Margin="0,0,0,8" LineHeight="14">
+                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="{DynamicResource BrushTextSecondary}" Margin="0,0,0,8" LineHeight="14">
                                         Prevents un-dimmed flashbangs on administrator elevation dialogs by setting PromptOnSecureDesktop = 0.
                                     </TextBlock>
-                                    <Button Content="Dim Administrator Popups" Click="OnFixUacClick" Style="{StaticResource ModernButton}" Background="#0284C7" HorizontalAlignment="Left" Padding="12,5"/>
+                                    <Button Content="Dim Administrator Popups" Click="OnFixUacClick" Style="{StaticResource ModernButton}" Background="#0284C7" Foreground="#FFFFFF" HorizontalAlignment="Left" Padding="12,5"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Card: Preferences -->
                             <Border Style="{StaticResource CardBorder}">
                                 <StackPanel>
-                                    <TextBlock Text="SYSTEM PREFERENCES" FontSize="9" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,6"/>
-                                    <CheckBox x:Name="StartupCheckBox" Content="Start automatically with Windows" Foreground="#CBD5E1" FontSize="11" Margin="0,0,0,6" Checked="OnStartupCheckChanged" Unchecked="OnStartupCheckChanged"/>
-                                    <CheckBox x:Name="ShowOsdCheckBox" Content="Show on-screen display (OSD) on hotkey" Foreground="#CBD5E1" FontSize="11" Checked="OnShowOsdCheckChanged" Unchecked="OnShowOsdCheckChanged"/>
+                                    <TextBlock Text="SYSTEM PREFERENCES" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="StartupCheckBox" Content="Start automatically with Windows" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Margin="0,0,0,6" Checked="OnStartupCheckChanged" Unchecked="OnStartupCheckChanged"/>
+                                    <CheckBox x:Name="ShowOsdCheckBox" Content="Show on-screen display (OSD) on hotkey" Foreground="{DynamicResource BrushTextPrimary}" FontSize="11" Checked="OnShowOsdCheckChanged" Unchecked="OnShowOsdCheckChanged"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -442,13 +477,13 @@
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
                         <StackPanel>
                             <!-- Card: Anti-PWM Flicker Tip -->
-                            <Border Background="#172554" BorderBrush="#1E40AF" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,10">
+                            <Border Background="{DynamicResource BrushTipCardBg}" BorderBrush="{DynamicResource BrushTipCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,10">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                         <TextBlock Text="💡" FontSize="13" Margin="0,0,5,0"/>
-                                        <TextBlock Text="How to eliminate screen flicker:" FontSize="11" FontWeight="Bold" Foreground="#93C5FD"/>
+                                        <TextBlock Text="How to eliminate screen flicker:" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource BrushTipCardTitle}"/>
                                     </StackPanel>
-                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="#BFDBFE" LineHeight="14">
+                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="{DynamicResource BrushTipCardText}" LineHeight="14">
                                         Keep laptop hardware brightness (Fn keys) at 100%. At 100%, PWM strobing stops completely. Then, use this app's slider to comfortably dim the screen!
                                     </TextBlock>
                                 </StackPanel>
@@ -457,34 +492,34 @@
                             <!-- Card: Global Hotkeys -->
                             <Border Style="{StaticResource CardBorder}">
                                 <StackPanel>
-                                    <TextBlock Text="GLOBAL HOTKEYS" FontSize="9" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,6"/>
+                                    <TextBlock Text="GLOBAL HOTKEYS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>
                                     <Grid Margin="0,0,0,3">
-                                        <TextBlock Text="Ctrl + Alt + Down" Foreground="#94A3B8" FontSize="10"/>
-                                        <TextBlock Text="Dim screen (+5%)" Foreground="#CBD5E1" FontSize="10" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="Ctrl + Alt + Down" Foreground="{DynamicResource BrushTextSecondary}" FontSize="10"/>
+                                        <TextBlock Text="Dim screen (+5%)" Foreground="{DynamicResource BrushTextPrimary}" FontSize="10" HorizontalAlignment="Right"/>
                                     </Grid>
                                     <Grid Margin="0,0,0,3">
-                                        <TextBlock Text="Ctrl + Alt + Up" Foreground="#94A3B8" FontSize="10"/>
-                                        <TextBlock Text="Brighten screen (-5%)" Foreground="#CBD5E1" FontSize="10" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="Ctrl + Alt + Up" Foreground="{DynamicResource BrushTextSecondary}" FontSize="10"/>
+                                        <TextBlock Text="Brighten screen (-5%)" Foreground="{DynamicResource BrushTextPrimary}" FontSize="10" HorizontalAlignment="Right"/>
                                     </Grid>
                                     <Grid Margin="0,0,0,3">
-                                        <TextBlock Text="Ctrl + Alt + D" Foreground="#94A3B8" FontSize="10"/>
-                                        <TextBlock Text="Toggle Dimmer On/Off" Foreground="#CBD5E1" FontSize="10" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="Ctrl + Alt + D" Foreground="{DynamicResource BrushTextSecondary}" FontSize="10"/>
+                                        <TextBlock Text="Toggle Dimmer On/Off" Foreground="{DynamicResource BrushTextPrimary}" FontSize="10" HorizontalAlignment="Right"/>
                                     </Grid>
                                     <Grid Margin="0,0,0,2">
-                                        <TextBlock Text="Ctrl + Alt + Esc" Foreground="#94A3B8" FontSize="10"/>
-                                        <TextBlock Text="Emergency Reset (0%)" Foreground="#CBD5E1" FontSize="10" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="Ctrl + Alt + Esc" Foreground="{DynamicResource BrushTextSecondary}" FontSize="10"/>
+                                        <TextBlock Text="Emergency Reset (0%)" Foreground="{DynamicResource BrushTextPrimary}" FontSize="10" HorizontalAlignment="Right"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- Card: Support & Ko-fi -->
-                            <Border Background="#1C1917" BorderBrush="#78350F" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,6">
+                            <Border Background="{DynamicResource BrushKofiCardBg}" BorderBrush="{DynamicResource BrushKofiCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,6">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                         <TextBlock Text="☕" FontSize="13" Margin="0,0,5,0"/>
-                                        <TextBlock Text="SUPPORT THE DEVELOPER" FontSize="9" FontWeight="Bold" Foreground="#F59E0B" VerticalAlignment="Center"/>
+                                        <TextBlock Text="SUPPORT THE DEVELOPER" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushKofiCardTitle}" VerticalAlignment="Center"/>
                                     </StackPanel>
-                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="#D6D3D1" Margin="0,0,0,8" LineHeight="14">
+                                    <TextBlock TextWrapping="Wrap" FontSize="10" Foreground="{DynamicResource BrushKofiCardText}" Margin="0,0,0,8" LineHeight="14">
                                         If FlickerFree Dimmer has saved your eyes or eliminated migraines, consider buying a coffee!
                                     </TextBlock>
                                     <Button Content="❤️ Support on Ko-fi (softwarebrotherhood)" Click="OnSupportKofiClick" Style="{StaticResource ModernButton}" Background="#FF5E5B" Foreground="#FFFFFF" HorizontalAlignment="Left" Padding="12,5"/>
@@ -497,7 +532,7 @@
 
             <!-- Footer -->
             <Grid Grid.Row="2" Margin="0,8,0,0">
-                <Button Content="Hide to Tray" Click="OnCloseToTrayClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Left" Background="#1E293B" Foreground="#94A3B8" Padding="12,5"/>
+                <Button Content="Hide to Tray" Click="OnCloseToTrayClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Left" Background="{DynamicResource BrushButtonBg}" Foreground="{DynamicResource BrushTextSecondary}" Padding="12,5"/>
                 <Button Content="☕ Support on Ko-fi" Click="OnSupportKofiClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Center" Background="#FF5E5B" Foreground="#FFFFFF" Padding="12,5"/>
                 <Button Content="Quit Dimmer" Click="OnQuitClick" Style="{StaticResource ModernButton}" HorizontalAlignment="Right" Background="#7F1D1D" Foreground="#FECACA" Padding="12,5"/>
             </Grid>
