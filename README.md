@@ -12,8 +12,8 @@
 
 | Platform | Download Package | Format | Architecture |
 | :--- | :--- | :--- | :--- |
-| **Windows** | [**Download Windows Installer**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
-| **Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
+| **Windows** | [**Download Windows Installer**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
+| **Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
 | **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
 | **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
 
@@ -56,7 +56,7 @@ ZeroDimmer (100% DC):      ═════════════════�
 ## 🪟 Windows Version
 
 ### Installation
-- Download and run [**ZeroDimmer_Setup_v1.0.0.exe**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
+- Download and run [**ZeroDimmer_Setup_v1.0.0.exe**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
 - Installs to local app data (no admin rights needed), creates Desktop & Start Menu shortcuts.
 
 Read the full [Windows Documentation](windows/README.md).

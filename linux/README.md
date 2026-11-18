@@ -21,8 +21,8 @@ Eliminates eye strain, headaches, and migraines caused by Pulse-Width Modulation
 ## 🚀 Quick Install (1-Click, No Sudo Required)
 
 ```bash
-git clone https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree.git
-cd ZeroDimmer-PWM-FlickerFree/linux
+git clone https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree.git
+cd ZeroDimmerPWMFlickerFree/linux
 chmod +x install.sh
 ./install.sh
 ```
