@@ -1,4 +1,4 @@
-# FlickerFree PWM Dimmer for Linux
+# ZeroDimmer for Linux (Zero-PWM Screen Dimmer)
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 
@@ -21,8 +21,8 @@ Eliminates eye strain, headaches, and migraines caused by Pulse-Width Modulation
 ## 🚀 Quick Install (1-Click, No Sudo Required)
 
 ```bash
-git clone https://github.com/salamimarketer/FlikerFreePWMDimmer.git
-cd FlikerFreePWMDimmer/linux
+git clone https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree.git
+cd ZeroDimmer-PWM-FlickerFree/linux
 chmod +x install.sh
 ./install.sh
 ```

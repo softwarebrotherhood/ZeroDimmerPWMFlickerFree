@@ -1,4 +1,4 @@
-# FlickerFree PWM Dimmer for macOS
+# ZeroDimmer for macOS (Zero-PWM Screen Dimmer)
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 
@@ -39,7 +39,7 @@ swift run
 chmod +x build-app.sh
 ./build-app.sh
 ```
-This generates `FlickerFreeDimmer.app`. Drag it to `/Applications` or launch directly:
+This generates `ZeroDimmer.app`. Drag it to `/Applications` or launch directly:
 ```bash
-open FlickerFreeDimmer.app
+open ZeroDimmer.app
 ```

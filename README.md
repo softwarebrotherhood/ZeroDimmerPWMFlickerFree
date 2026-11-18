@@ -1,4 +1,4 @@
-# ZeroDimmer 🛡️🌙
+# ZeroDimmer 🛡️ — Zero-Flicker PWM Screen Dimmer
 
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](windows/)
 [![macOS](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
@@ -12,8 +12,8 @@
 
 | Platform | Download Package | Format | Architecture |
 | :--- | :--- | :--- | :--- |
-| **Windows** | [**Download Windows Installer**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
-| **Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
+| **Windows** | [**Download Windows Installer**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | `.exe` (Inno Setup) | x64 / ARM64 |
+| **Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/tree/main/windows/bin/Release/net9.0-windows/publish) | `.zip` Standalone | x64 |
 | **macOS** | [**macOS Package & Build Guide**](macos/) | `.app` / Swift SPM | Apple Silicon & Intel |
 | **Linux** | [**Linux 1-Click Installer**](linux/) | `.sh` / Desktop App | X11 & Wayland (Universal) |
 
@@ -56,7 +56,7 @@ ZeroDimmer (100% DC):      ═════════════════�
 ## 🪟 Windows Version
 
 ### Installation
-- Download and run [**ZeroDimmer_Setup_v1.0.0.exe**](https://github.com/softwarebrotherhood/FlikerFreePWMDimmer/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
+- Download and run [**ZeroDimmer_Setup_v1.0.0.exe**](https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
 - Installs to local app data (no admin rights needed), creates Desktop & Start Menu shortcuts.
 
 Read the full [Windows Documentation](windows/README.md).

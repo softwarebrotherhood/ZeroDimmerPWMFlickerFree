@@ -2,7 +2,7 @@
 #define MyAppName "ZeroDimmer"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "softwarebrotherhood"
-#define MyAppURL "https://github.com/softwarebrotherhood/FlikerFreePWMDimmer"
+#define MyAppURL "https://github.com/softwarebrotherhood/ZeroDimmer-PWM-FlickerFree"
 #define MyAppExeName "ZeroDimmer.exe"
 
 [Setup]

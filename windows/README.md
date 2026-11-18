@@ -1,4 +1,4 @@
-# FlickerFree PWM Dimmer for Windows
+# ZeroDimmer for Windows (Zero-PWM Screen Dimmer)
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 
@@ -31,12 +31,12 @@ Eliminates eye strain, headaches, and migraines caused by Pulse-Width Modulation
 
 ### 1. Inno Setup Installer (.exe)
 Download and run:
-`bin/Release/net9.0-windows/installer/FlickerFreeDimmer_Setup_v1.0.0.exe`
+`bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe`
 - Single-click setup with automatic desktop and Start Menu shortcuts.
 - No administrator privileges required to install.
 
 ### 2. Standalone Portable
-Run directly without installing from `bin/Release/net9.0-windows/publish/AntiFlickerDimmer.exe`.
+Run directly without installing from `bin/Release/net9.0-windows/publish/ZeroDimmer.exe`.
 
 ---
 
@@ -55,6 +55,6 @@ dotnet run -c Release
 
 ### Compile Release & Installer
 ```powershell
-dotnet publish AntiFlickerDimmer.csproj -c Release -r win-x64 --self-contained false -o bin/Release/net9.0-windows/publish
+dotnet publish ZeroDimmer.csproj -c Release -r win-x64 --self-contained false -o bin/Release/net9.0-windows/publish
 iscc installer.iss
 ```
