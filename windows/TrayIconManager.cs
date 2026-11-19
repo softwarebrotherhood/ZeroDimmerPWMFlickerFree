@@ -57,12 +57,12 @@ public class TrayIconManager : IDisposable
         presetsMenu.DropDownItems.Add(new ToolStripMenuItem("80% Darkness", null, (s, e) => OnPresetSelected?.Invoke(80)));
         menu.Items.Add(presetsMenu);
 
-        var screensSubMenu = new ToolStripMenuItem("Target Displays");
-        _screenAllItem = new ToolStripMenuItem("🌐 All Connected Screens", null, (s, e) => OnScreenTargetSelected?.Invoke("All"))
+        var screensSubMenu = new ToolStripMenuItem("Display Mode");
+        _screenAllItem = new ToolStripMenuItem("🌐 All Screens (Unified)", null, (s, e) => OnScreenTargetSelected?.Invoke("All"))
         {
             Checked = true
         };
-        _screenPrimaryItem = new ToolStripMenuItem("💻 Primary Screen Only", null, (s, e) => OnScreenTargetSelected?.Invoke("Primary"));
+        _screenPrimaryItem = new ToolStripMenuItem("🖥️ Separate Per Screen", null, (s, e) => OnScreenTargetSelected?.Invoke("Separate"));
         screensSubMenu.DropDownItems.Add(_screenAllItem);
         screensSubMenu.DropDownItems.Add(_screenPrimaryItem);
         menu.Items.Add(screensSubMenu);
@@ -114,12 +114,12 @@ public class TrayIconManager : IDisposable
         UpdateIcon(true, 35);
     }
 
-    public void UpdateStatus(bool isEnabled, int level, bool startWithWindows, string screenTarget = "All")
+    public void UpdateStatus(bool isEnabled, int level, bool startWithWindows, string screenTargetMode = "All")
     {
         _activeMenuItem.Checked = isEnabled;
         _startWithWindowsItem.Checked = startWithWindows;
-        _screenAllItem.Checked = screenTarget == "All";
-        _screenPrimaryItem.Checked = screenTarget == "Primary";
+        _screenAllItem.Checked = screenTargetMode == "All";
+        _screenPrimaryItem.Checked = screenTargetMode == "Separate";
 
         string tooltip = isEnabled && level > 0
             ? $"ZeroDimmer: {level}% (Active)"

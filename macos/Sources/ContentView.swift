@@ -118,15 +118,15 @@ public struct ContentView: View {
                     }
                     .disabled(!state.isEnabled)
 
-                    // Connected Screens & Displays Target
+                    // Connected Screens & Displays Mode
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Connected Screens")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundColor(.secondary)
 
                         Picker("", selection: $state.screenTarget) {
-                            Text("All Connected Screens").tag("All")
-                            Text("Primary Only").tag("Primary")
+                            Text("All Screens (Unified)").tag("All")
+                            Text("Separate Per Screen").tag("Separate")
                         }
                         .pickerStyle(SegmentedPickerStyle())
                     }

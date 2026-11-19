@@ -29,7 +29,24 @@ public class AppSettings
     public double WindowLeft { get; set; } = -1;
     public double WindowTop { get; set; } = -1;
     public bool AllowWindowMove { get; set; } = true;
-    public string ScreenTarget { get; set; } = "All"; // "All" (All Connected Screens), "Primary" (Primary Screen Only), or specific DeviceName e.g. "\\.\DISPLAY1"
+    public string ScreenTargetMode { get; set; } = "All"; // "All" (Unified All Screens) or "Separate" (Per-Screen Independent)
+    public string ActiveScreenDevice { get; set; } = ""; // Active screen device for editing in Separate mode
+    public Dictionary<string, int> ScreenDimLevels { get; set; } = new(); // Per-device dim levels e.g. { "\\.\DISPLAY1": 35 }
+
+    public int GetScreenDimLevel(string deviceName)
+    {
+        if (ScreenDimLevels != null && ScreenDimLevels.TryGetValue(deviceName, out int val))
+        {
+            return Math.Clamp(val, 0, MaxDimLevel);
+        }
+        return DimLevel;
+    }
+
+    public void SetScreenDimLevel(string deviceName, int level)
+    {
+        ScreenDimLevels ??= new Dictionary<string, int>();
+        ScreenDimLevels[deviceName] = Math.Clamp(level, 0, MaxDimLevel);
+    }
 
     public static AppSettings Load()
     {
@@ -55,9 +72,10 @@ public class AppSettings
                     // Clamp values to safe boundaries
                     settings.DimLevel = Math.Clamp(settings.DimLevel, 0, settings.MaxDimLevel);
                     settings.MaxDimLevel = Math.Clamp(settings.MaxDimLevel, 50, 95);
-                    if (string.IsNullOrWhiteSpace(settings.ScreenTarget))
+                    settings.ScreenDimLevels ??= new Dictionary<string, int>();
+                    if (string.IsNullOrWhiteSpace(settings.ScreenTargetMode))
                     {
-                        settings.ScreenTarget = "All";
+                        settings.ScreenTargetMode = "All";
                     }
                     return settings;
                 }

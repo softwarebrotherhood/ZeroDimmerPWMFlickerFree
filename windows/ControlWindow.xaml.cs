@@ -92,10 +92,10 @@ public partial class ControlWindow : Window
             if (StartupCheckBox != null) StartupCheckBox.IsChecked = enabled;
             _settings.Save();
         });
-        _trayManager.OnScreenTargetSelected += (target) => Dispatcher.Invoke(() =>
+        _trayManager.OnScreenTargetSelected += (mode) => Dispatcher.Invoke(() =>
         {
-            _settings.ScreenTarget = target;
-            LoadSettingsIntoUi();
+            _settings.ScreenTargetMode = mode;
+            UpdateScreenModeUi();
             ApplyState();
             _settings.Save();
         });
@@ -169,22 +169,7 @@ public partial class ControlWindow : Window
                 break;
         }
 
-        RefreshScreenList();
-
-        if (_settings.ScreenTarget == "Primary")
-        {
-            if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = true;
-        }
-        else if (_settings.ScreenTarget == "All")
-        {
-            if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = true;
-        }
-        else
-        {
-            if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = false;
-            if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = false;
-        }
-        SelectScreenInCombo(_settings.ScreenTarget);
+        UpdateScreenControls();
 
         UpdatePowerUi();
 
@@ -211,8 +196,9 @@ public partial class ControlWindow : Window
             tintColor,
             _settings.TintMode,
             _settings.DimmerMethod,
-            _settings.ScreenTarget);
-        _trayManager.UpdateStatus(_settings.IsEnabled, _settings.DimLevel, _settings.StartWithWindows, _settings.ScreenTarget);
+            _settings.ScreenTargetMode,
+            _settings.ScreenDimLevels);
+        _trayManager.UpdateStatus(_settings.IsEnabled, _settings.DimLevel, _settings.StartWithWindows, _settings.ScreenTargetMode);
     }
 
     private void UpdatePowerUi()
@@ -249,7 +235,17 @@ public partial class ControlWindow : Window
     private void SetDimLevel(int level)
     {
         level = Math.Clamp(level, 0, _settings.MaxDimLevel);
-        _settings.DimLevel = level;
+
+        if (_settings.ScreenTargetMode == "Separate" && !string.IsNullOrEmpty(_activeScreenDevice))
+        {
+            _settings.SetScreenDimLevel(_activeScreenDevice, level);
+            UpdateChipAndRow(_activeScreenDevice, level);
+        }
+        else
+        {
+            _settings.DimLevel = level;
+        }
+
         if (!_settings.IsEnabled && level > 0)
         {
             _settings.IsEnabled = true;
@@ -266,13 +262,16 @@ public partial class ControlWindow : Window
 
         if (_settings.ShowOsd)
         {
-            _osdWindow.ShowFeedback(_settings.DimLevel, _settings.IsEnabled);
+            _osdWindow.ShowFeedback(level, _settings.IsEnabled);
         }
     }
 
     private void AdjustDimLevel(int delta)
     {
-        SetDimLevel(_settings.DimLevel + delta);
+        int current = _settings.ScreenTargetMode == "Separate" && !string.IsNullOrEmpty(_activeScreenDevice)
+            ? _settings.GetScreenDimLevel(_activeScreenDevice)
+            : _settings.DimLevel;
+        SetDimLevel(current + delta);
     }
 
     private void TogglePower()
@@ -353,8 +352,18 @@ public partial class ControlWindow : Window
         if (_isUpdatingUi || _settings == null || DimLevelText == null) return;
 
         int newLevel = (int)Math.Round(e.NewValue);
-        _settings.DimLevel = newLevel;
-        DimLevelText.Text = $"{newLevel}%";
+
+        if (_settings.ScreenTargetMode == "Separate" && !string.IsNullOrEmpty(_activeScreenDevice))
+        {
+            _settings.SetScreenDimLevel(_activeScreenDevice, newLevel);
+            DimLevelText.Text = $"{newLevel}%";
+            UpdateChipAndRow(_activeScreenDevice, newLevel);
+        }
+        else
+        {
+            _settings.DimLevel = newLevel;
+            DimLevelText.Text = $"{newLevel}%";
+        }
 
         ApplyState();
         _settings.Save();
@@ -652,116 +661,318 @@ public partial class ControlWindow : Window
         }
     }
 
-    private void RefreshScreenList()
-    {
-        if (ScreenSelectionCombo == null || ScreenCountText == null) return;
+    private string _activeScreenDevice = "";
+    private readonly Dictionary<string, System.Windows.Controls.Slider> _screenSliders = new();
+    private readonly Dictionary<string, System.Windows.Controls.TextBlock> _screenLevelTexts = new();
+    private readonly Dictionary<string, WpfButton> _screenChips = new();
 
+    private void UpdateScreenControls()
+    {
         var screens = System.Windows.Forms.Screen.AllScreens;
         int count = screens.Length;
-        ScreenCountText.Text = count == 1 ? "1 Screen Detected" : $"{count} Screens Connected";
-
-        _isUpdatingUi = true;
-        ScreenSelectionCombo.Items.Clear();
-
-        var allItem = new System.Windows.Controls.ComboBoxItem
+        if (ScreenCountText != null)
         {
-            Content = "🌐 All Connected Screens (All Monitors)",
-            Tag = "All"
-        };
-        ScreenSelectionCombo.Items.Add(allItem);
-
-        var primaryItem = new System.Windows.Controls.ComboBoxItem
-        {
-            Content = "💻 Primary Screen Only",
-            Tag = "Primary"
-        };
-        ScreenSelectionCombo.Items.Add(primaryItem);
-
-        for (int i = 0; i < count; i++)
-        {
-            var scr = screens[i];
-            string primaryBadge = scr.Primary ? " (Primary)" : "";
-            var item = new System.Windows.Controls.ComboBoxItem
-            {
-                Content = $"🖥️ Display {i + 1}: {scr.Bounds.Width}×{scr.Bounds.Height}{primaryBadge}",
-                Tag = scr.DeviceName
-            };
-            ScreenSelectionCombo.Items.Add(item);
+            ScreenCountText.Text = count == 1 ? "1 Screen Detected" : $"{count} Screens Connected";
         }
 
-        SelectScreenInCombo(_settings.ScreenTarget);
+        if (string.IsNullOrEmpty(_activeScreenDevice) || !Array.Exists(screens, s => s.DeviceName == _activeScreenDevice))
+        {
+            var primary = Array.Find(screens, s => s.Primary) ?? (screens.Length > 0 ? screens[0] : null);
+            _activeScreenDevice = primary?.DeviceName ?? "";
+            _settings.ActiveScreenDevice = _activeScreenDevice;
+        }
+
+        if (_settings.ScreenTargetMode == "Separate")
+        {
+            if (ScreenSeparateRadio != null) ScreenSeparateRadio.IsChecked = true;
+            if (PerScreenPanel != null) PerScreenPanel.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = true;
+            if (PerScreenPanel != null) PerScreenPanel.Visibility = Visibility.Collapsed;
+        }
+
+        BuildPerScreenControls();
+    }
+
+    private void BuildPerScreenControls()
+    {
+        if (ScreenChipsPanel == null || PerScreenListPanel == null) return;
+
+        ScreenChipsPanel.Children.Clear();
+        PerScreenListPanel.Children.Clear();
+        _screenSliders.Clear();
+        _screenLevelTexts.Clear();
+        _screenChips.Clear();
+
+        var screens = System.Windows.Forms.Screen.AllScreens;
+
+        for (int i = 0; i < screens.Length; i++)
+        {
+            var scr = screens[i];
+            string dev = scr.DeviceName;
+            int level = _settings.GetScreenDimLevel(dev);
+            string displayName = $"Display {i + 1}{(scr.Primary ? " (Primary)" : "")}";
+
+            // 1. Chip button in ScreenChipsPanel
+            var chip = new WpfButton
+            {
+                Content = $"{displayName}: {level}%",
+                Tag = dev,
+                Margin = new Thickness(0, 0, 6, 4),
+                Padding = new Thickness(8, 4, 8, 4),
+                FontSize = 10,
+                FontWeight = FontWeights.SemiBold,
+                Cursor = System.Windows.Input.Cursors.Hand
+            };
+            if (TryFindResource("PresetChip") is Style chipStyle)
+            {
+                chip.Style = chipStyle;
+            }
+            chip.Click += (s, e) =>
+            {
+                SetActiveScreenDevice(dev);
+            };
+            _screenChips[dev] = chip;
+            ScreenChipsPanel.Children.Add(chip);
+
+            // 2. Row in PerScreenListPanel
+            var rowBorder = new System.Windows.Controls.Border
+            {
+                Background = TryFindResource("BrushCardBg") as System.Windows.Media.Brush ?? new SolidColorBrush(MediaColor.FromRgb(30, 41, 59)),
+                BorderBrush = TryFindResource("BrushCardBorder") as System.Windows.Media.Brush ?? new SolidColorBrush(MediaColor.FromRgb(51, 65, 85)),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(6),
+                Padding = new Thickness(8, 6, 8, 6),
+                Margin = new Thickness(0, 0, 0, 6)
+            };
+
+            var rowStack = new System.Windows.Controls.StackPanel();
+
+            // Row header: name + percentage
+            var rowHeader = new System.Windows.Controls.Grid { Margin = new Thickness(0, 0, 0, 4) };
+            var nameBlock = new System.Windows.Controls.TextBlock
+            {
+                Text = $"🖥️ {displayName} — {scr.Bounds.Width}×{scr.Bounds.Height}",
+                FontSize = 10,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = TryFindResource("BrushTextPrimary") as System.Windows.Media.Brush ?? new SolidColorBrush(Colors.White),
+                VerticalAlignment = System.Windows.VerticalAlignment.Center
+            };
+            var lvlBlock = new System.Windows.Controls.TextBlock
+            {
+                Text = $"{level}%",
+                FontSize = 11,
+                FontWeight = FontWeights.Bold,
+                Foreground = TryFindResource("BrushAccent") as System.Windows.Media.Brush ?? new SolidColorBrush(MediaColor.FromRgb(56, 189, 248)),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center
+            };
+            _screenLevelTexts[dev] = lvlBlock;
+            rowHeader.Children.Add(nameBlock);
+            rowHeader.Children.Add(lvlBlock);
+            rowStack.Children.Add(rowHeader);
+
+            // Slider & Stepper row
+            var sliderGrid = new System.Windows.Controls.Grid();
+            sliderGrid.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            sliderGrid.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition { Width = GridLength.Auto });
+
+            var rowSlider = new System.Windows.Controls.Slider
+            {
+                Minimum = 0,
+                Maximum = 90,
+                Value = level,
+                SmallChange = 1,
+                LargeChange = 5,
+                Height = 20,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 8, 0)
+            };
+            _screenSliders[dev] = rowSlider;
+
+            rowSlider.ValueChanged += (s, e) =>
+            {
+                if (_isUpdatingUi) return;
+                int val = (int)Math.Round(e.NewValue);
+                _settings.SetScreenDimLevel(dev, val);
+                lvlBlock.Text = $"{val}%";
+                chip.Content = $"{displayName}: {val}%";
+
+                if (dev == _activeScreenDevice)
+                {
+                    _isUpdatingUi = true;
+                    if (DimSlider != null) DimSlider.Value = val;
+                    if (DimLevelText != null) DimLevelText.Text = $"{val}%";
+                    _isUpdatingUi = false;
+                }
+
+                ApplyState();
+                _settings.Save();
+            };
+
+            System.Windows.Controls.Grid.SetColumn(rowSlider, 0);
+            sliderGrid.Children.Add(rowSlider);
+
+            // Steppers
+            var stepperStack = new System.Windows.Controls.StackPanel
+            {
+                Orientation = System.Windows.Controls.Orientation.Horizontal,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center
+            };
+            var minusBtn = new WpfButton
+            {
+                Content = "-",
+                Width = 22,
+                Height = 22,
+                Padding = new Thickness(0),
+                FontSize = 12,
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(0, 0, 4, 0),
+                Cursor = System.Windows.Input.Cursors.Hand
+            };
+            if (TryFindResource("ModernButton") is Style btnStyle)
+            {
+                minusBtn.Style = btnStyle;
+            }
+            minusBtn.Click += (s, e) =>
+            {
+                rowSlider.Value = Math.Max(0, rowSlider.Value - 5);
+            };
+
+            var plusBtn = new WpfButton
+            {
+                Content = "+",
+                Width = 22,
+                Height = 22,
+                Padding = new Thickness(0),
+                FontSize = 12,
+                FontWeight = FontWeights.Bold,
+                Cursor = System.Windows.Input.Cursors.Hand
+            };
+            if (TryFindResource("ModernButton") is Style btnStyle2)
+            {
+                plusBtn.Style = btnStyle2;
+            }
+            plusBtn.Click += (s, e) =>
+            {
+                rowSlider.Value = Math.Min(_settings.MaxDimLevel, rowSlider.Value + 5);
+            };
+
+            stepperStack.Children.Add(minusBtn);
+            stepperStack.Children.Add(plusBtn);
+            System.Windows.Controls.Grid.SetColumn(stepperStack, 1);
+            sliderGrid.Children.Add(stepperStack);
+
+            rowStack.Children.Add(sliderGrid);
+            rowBorder.Child = rowStack;
+            PerScreenListPanel.Children.Add(rowBorder);
+        }
+
+        HighlightActiveChip();
+    }
+
+    private void SetActiveScreenDevice(string dev)
+    {
+        _activeScreenDevice = dev;
+        _settings.ActiveScreenDevice = dev;
+        HighlightActiveChip();
+
+        int level = _settings.GetScreenDimLevel(dev);
+        _isUpdatingUi = true;
+        if (DimSlider != null) DimSlider.Value = level;
+        if (DimLevelText != null) DimLevelText.Text = $"{level}%";
         _isUpdatingUi = false;
     }
 
-    private void SelectScreenInCombo(string target)
+    private void HighlightActiveChip()
     {
-        if (ScreenSelectionCombo == null) return;
-
-        for (int i = 0; i < ScreenSelectionCombo.Items.Count; i++)
+        foreach (var kvp in _screenChips)
         {
-            if (ScreenSelectionCombo.Items[i] is System.Windows.Controls.ComboBoxItem item &&
-                item.Tag is string tag &&
-                string.Equals(tag, target, StringComparison.OrdinalIgnoreCase))
-            {
-                ScreenSelectionCombo.SelectedIndex = i;
-                return;
-            }
+            bool isActive = kvp.Key == _activeScreenDevice;
+            kvp.Value.BorderBrush = isActive 
+                ? (TryFindResource("BrushAccent") as System.Windows.Media.Brush ?? new SolidColorBrush(MediaColor.FromRgb(56, 189, 248)))
+                : (TryFindResource("BrushCardBorder") as System.Windows.Media.Brush ?? new SolidColorBrush(MediaColor.FromRgb(51, 65, 85)));
+            kvp.Value.BorderThickness = new Thickness(isActive ? 2 : 1);
         }
-
-        ScreenSelectionCombo.SelectedIndex = 0;
     }
 
-    private void OnScreenTargetRadioChanged(object sender, RoutedEventArgs e)
+    private void UpdateChipAndRow(string dev, int level)
+    {
+        if (_screenSliders.TryGetValue(dev, out var sld) && Math.Abs(sld.Value - level) > 0.5)
+        {
+            _isUpdatingUi = true;
+            sld.Value = level;
+            _isUpdatingUi = false;
+        }
+        if (_screenLevelTexts.TryGetValue(dev, out var txt))
+        {
+            txt.Text = $"{level}%";
+        }
+        if (_screenChips.TryGetValue(dev, out var chip))
+        {
+            var screens = System.Windows.Forms.Screen.AllScreens;
+            var scr = Array.Find(screens, s => s.DeviceName == dev);
+            int idx = Array.IndexOf(screens, scr);
+            string dispName = $"Display {idx + 1}{(scr != null && scr.Primary ? " (Primary)" : "")}";
+            chip.Content = $"{dispName}: {level}%";
+        }
+    }
+
+    private void OnScreenModeRadioChanged(object sender, RoutedEventArgs e)
     {
         if (_isUpdatingUi || _settings == null) return;
 
-        if (sender is WpfRadioButton radio && radio.Tag is string tag && radio.IsChecked == true)
+        if (sender is WpfRadioButton rb && rb.IsChecked == true && rb.Tag is string mode)
         {
-            _settings.ScreenTarget = tag;
-            _isUpdatingUi = true;
-            SelectScreenInCombo(tag);
-            _isUpdatingUi = false;
-
+            _settings.ScreenTargetMode = mode;
+            UpdateScreenModeUi();
             ApplyState();
             _settings.Save();
         }
     }
 
-    private void OnScreenComboChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    private void UpdateScreenModeUi()
     {
-        if (_isUpdatingUi || _settings == null || ScreenSelectionCombo?.SelectedItem is not System.Windows.Controls.ComboBoxItem item)
-            return;
-
-        if (item.Tag is string tag)
+        bool isSeparate = _settings.ScreenTargetMode == "Separate";
+        if (PerScreenPanel != null)
         {
-            _settings.ScreenTarget = tag;
-
-            _isUpdatingUi = true;
-            if (tag == "All")
-            {
-                if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = true;
-            }
-            else if (tag == "Primary")
-            {
-                if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = true;
-            }
-            else
-            {
-                if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = false;
-                if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = false;
-            }
-            _isUpdatingUi = false;
-
-            ApplyState();
-            _settings.Save();
+            PerScreenPanel.Visibility = isSeparate ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        if (isSeparate)
+        {
+            var screens = System.Windows.Forms.Screen.AllScreens;
+            if (string.IsNullOrEmpty(_activeScreenDevice) || !Array.Exists(screens, s => s.DeviceName == _activeScreenDevice))
+            {
+                var primary = Array.Find(screens, s => s.Primary) ?? (screens.Length > 0 ? screens[0] : null);
+                _activeScreenDevice = primary?.DeviceName ?? "";
+                _settings.ActiveScreenDevice = _activeScreenDevice;
+            }
+
+            int activeLvl = _settings.GetScreenDimLevel(_activeScreenDevice);
+            _isUpdatingUi = true;
+            if (DimSlider != null) DimSlider.Value = activeLvl;
+            if (DimLevelText != null) DimLevelText.Text = $"{activeLvl}%";
+            _isUpdatingUi = false;
+        }
+        else
+        {
+            _isUpdatingUi = true;
+            if (DimSlider != null) DimSlider.Value = _settings.DimLevel;
+            if (DimLevelText != null) DimLevelText.Text = $"{_settings.DimLevel}%";
+            _isUpdatingUi = false;
+        }
+
+        BuildPerScreenControls();
     }
 
     private void OnDisplaySettingsChanged(object? sender, EventArgs e)
     {
         Dispatcher.Invoke(() =>
         {
-            RefreshScreenList();
+            UpdateScreenControls();
             ApplyState();
         });
     }
