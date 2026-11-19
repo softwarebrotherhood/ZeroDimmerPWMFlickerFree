@@ -29,6 +29,7 @@ public class AppSettings
     public double WindowLeft { get; set; } = -1;
     public double WindowTop { get; set; } = -1;
     public bool AllowWindowMove { get; set; } = true;
+    public string ScreenTarget { get; set; } = "All"; // "All" (All Connected Screens), "Primary" (Primary Screen Only), or specific DeviceName e.g. "\\.\DISPLAY1"
 
     public static AppSettings Load()
     {
@@ -54,6 +55,10 @@ public class AppSettings
                     // Clamp values to safe boundaries
                     settings.DimLevel = Math.Clamp(settings.DimLevel, 0, settings.MaxDimLevel);
                     settings.MaxDimLevel = Math.Clamp(settings.MaxDimLevel, 50, 95);
+                    if (string.IsNullOrWhiteSpace(settings.ScreenTarget))
+                    {
+                        settings.ScreenTarget = "All";
+                    }
                     return settings;
                 }
             }

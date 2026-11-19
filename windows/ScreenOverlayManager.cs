@@ -18,6 +18,7 @@ public class ScreenOverlayManager : IDisposable
     private MediaColor _currentTintColor = Colors.Black;
     private string _currentTintMode = "NeutralBlack";
     private string _dimmerMethod = "Dwm";
+    private string _screenTarget = "All";
 
     public ScreenOverlayManager()
     {
@@ -33,7 +34,7 @@ public class ScreenOverlayManager : IDisposable
         };
         _topmostTimer.Tick += (s, e) =>
         {
-            if (_dimmerMethod == "Overlay")
+            if (_dimmerMethod == "Overlay" || _screenTarget != "All")
             {
                 foreach (var overlay in _overlays)
                 {
@@ -75,22 +76,25 @@ public class ScreenOverlayManager : IDisposable
         InitializeOverlays();
     }
 
-    public void UpdateDimming(int level, bool isEnabled, MediaColor tintColor, string tintMode, string dimmerMethod)
+    public void UpdateDimming(int level, bool isEnabled, MediaColor tintColor, string tintMode, string dimmerMethod, string screenTarget = "All")
     {
         _currentDimLevel = level;
         _isEnabled = isEnabled;
         _currentTintColor = tintColor;
         _currentTintMode = tintMode;
         _dimmerMethod = dimmerMethod;
+        _screenTarget = string.IsNullOrWhiteSpace(screenTarget) ? "All" : screenTarget;
 
         ApplyCurrentState();
     }
 
     private void ApplyCurrentState()
     {
-        if (_dimmerMethod == "Dwm" && _dwmEngine.IsSupported)
+        double effectiveOpacity = _isEnabled ? (_currentDimLevel / 100.0) : 0.0;
+
+        if (_screenTarget == "All" && _dimmerMethod == "Dwm" && _dwmEngine.IsSupported)
         {
-            // DWM Engine covers EVERYTHING (Taskbar, Start Menu, Popups, Windows)
+            // DWM Engine covers EVERYTHING across all screens
             _dwmEngine.UpdateDimming(_currentDimLevel, _isEnabled, _currentTintMode);
 
             // Hide overlay windows so they don't double-dim
@@ -101,13 +105,30 @@ public class ScreenOverlayManager : IDisposable
         }
         else
         {
-            // Fallback to overlay window mode
+            // Fallback to overlay window mode (or when targeting specific screen / primary only)
             _dwmEngine.ResetToNormal();
 
-            double effectiveOpacity = _isEnabled ? (_currentDimLevel / 100.0) : 0.0;
             foreach (var overlay in _overlays)
             {
-                overlay.SetDimming(effectiveOpacity, _currentTintColor);
+                bool shouldDim = false;
+                if (_isEnabled)
+                {
+                    if (_screenTarget == "All")
+                    {
+                        shouldDim = true;
+                    }
+                    else if (_screenTarget == "Primary")
+                    {
+                        shouldDim = overlay.TargetScreen.Primary;
+                    }
+                    else
+                    {
+                        // Specific device name e.g. "\\.\DISPLAY1"
+                        shouldDim = string.Equals(overlay.TargetScreen.DeviceName, _screenTarget, StringComparison.OrdinalIgnoreCase);
+                    }
+                }
+
+                overlay.SetDimming(shouldDim ? effectiveOpacity : 0.0, _currentTintColor);
                 overlay.ApplyScreenBounds();
             }
         }

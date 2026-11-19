@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ZeroDimmer"
         Width="410"
-        Height="495"
+        Height="530"
         WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="False"
@@ -400,7 +400,54 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Card 2: Tint & Color Mode -->
+                            <!-- Card 2: Connected Screens & Monitors -->
+                            <Border Style="{StaticResource CardBorder}">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,6">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="🖥️" FontSize="11" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="CONNECTED SCREENS &amp; MONITORS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="ScreenCountText" Text="1 Screen Detected" FontSize="9" FontWeight="SemiBold" Foreground="{DynamicResource BrushAccent}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <RadioButton x:Name="ScreenAllRadio" 
+                                                 Content="All Connected Screens (All Monitors)" 
+                                                 GroupName="ScreenGroup" 
+                                                 Foreground="{DynamicResource BrushTextPrimary}" 
+                                                 FontWeight="SemiBold" 
+                                                 FontSize="11" 
+                                                 Margin="0,0,0,5" 
+                                                 IsChecked="True" 
+                                                 Checked="OnScreenTargetRadioChanged" 
+                                                 Tag="All"/>
+
+                                    <RadioButton x:Name="ScreenPrimaryRadio" 
+                                                 Content="Primary Screen Only" 
+                                                 GroupName="ScreenGroup" 
+                                                 Foreground="{DynamicResource BrushTextPrimary}" 
+                                                 FontSize="11" 
+                                                 Margin="0,0,0,6" 
+                                                 Checked="OnScreenTargetRadioChanged" 
+                                                 Tag="Primary"/>
+
+                                    <Grid Margin="0,2,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Target Display:" FontSize="10" Foreground="{DynamicResource BrushTextSecondary}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <ComboBox x:Name="ScreenSelectionCombo" 
+                                                  Grid.Column="1" 
+                                                  SelectionChanged="OnScreenComboChanged" 
+                                                  Height="24" 
+                                                  FontSize="10" 
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card 3: Tint & Color Mode -->
                             <Border Style="{StaticResource CardBorder}">
                                 <StackPanel>
                                     <TextBlock Text="EYE CARE &amp; NIGHT TINT" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BrushTextMuted}" Margin="0,0,0,6"/>

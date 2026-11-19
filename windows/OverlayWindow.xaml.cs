@@ -16,6 +16,11 @@ public partial class OverlayWindow : Window
     {
         InitializeComponent();
         TargetScreen = screen;
+        WindowStartupLocation = WindowStartupLocation.Manual;
+        Left = screen.Bounds.Left;
+        Top = screen.Bounds.Top;
+        Width = screen.Bounds.Width;
+        Height = screen.Bounds.Height;
     }
 
     protected override void OnSourceInitialized(EventArgs e)

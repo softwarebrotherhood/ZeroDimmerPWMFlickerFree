@@ -92,6 +92,13 @@ public partial class ControlWindow : Window
             if (StartupCheckBox != null) StartupCheckBox.IsChecked = enabled;
             _settings.Save();
         });
+        _trayManager.OnScreenTargetSelected += (target) => Dispatcher.Invoke(() =>
+        {
+            _settings.ScreenTarget = target;
+            LoadSettingsIntoUi();
+            ApplyState();
+            _settings.Save();
+        });
         _trayManager.OnExitRequested += () => Dispatcher.Invoke(PerformExit);
 
         // Hotkey callbacks
@@ -102,6 +109,7 @@ public partial class ControlWindow : Window
 
         // System theme changed callback
         Microsoft.Win32.SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
+        Microsoft.Win32.SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
     }
 
     private void OnUserPreferenceChanged(object? sender, Microsoft.Win32.UserPreferenceChangedEventArgs e)
@@ -161,6 +169,23 @@ public partial class ControlWindow : Window
                 break;
         }
 
+        RefreshScreenList();
+
+        if (_settings.ScreenTarget == "Primary")
+        {
+            if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = true;
+        }
+        else if (_settings.ScreenTarget == "All")
+        {
+            if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = true;
+        }
+        else
+        {
+            if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = false;
+            if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = false;
+        }
+        SelectScreenInCombo(_settings.ScreenTarget);
+
         UpdatePowerUi();
 
         _isUpdatingUi = false;
@@ -185,8 +210,9 @@ public partial class ControlWindow : Window
             _settings.IsEnabled,
             tintColor,
             _settings.TintMode,
-            _settings.DimmerMethod);
-        _trayManager.UpdateStatus(_settings.IsEnabled, _settings.DimLevel, _settings.StartWithWindows);
+            _settings.DimmerMethod,
+            _settings.ScreenTarget);
+        _trayManager.UpdateStatus(_settings.IsEnabled, _settings.DimLevel, _settings.StartWithWindows, _settings.ScreenTarget);
     }
 
     private void UpdatePowerUi()
@@ -626,9 +652,124 @@ public partial class ControlWindow : Window
         }
     }
 
+    private void RefreshScreenList()
+    {
+        if (ScreenSelectionCombo == null || ScreenCountText == null) return;
+
+        var screens = System.Windows.Forms.Screen.AllScreens;
+        int count = screens.Length;
+        ScreenCountText.Text = count == 1 ? "1 Screen Detected" : $"{count} Screens Connected";
+
+        _isUpdatingUi = true;
+        ScreenSelectionCombo.Items.Clear();
+
+        var allItem = new System.Windows.Controls.ComboBoxItem
+        {
+            Content = "🌐 All Connected Screens (All Monitors)",
+            Tag = "All"
+        };
+        ScreenSelectionCombo.Items.Add(allItem);
+
+        var primaryItem = new System.Windows.Controls.ComboBoxItem
+        {
+            Content = "💻 Primary Screen Only",
+            Tag = "Primary"
+        };
+        ScreenSelectionCombo.Items.Add(primaryItem);
+
+        for (int i = 0; i < count; i++)
+        {
+            var scr = screens[i];
+            string primaryBadge = scr.Primary ? " (Primary)" : "";
+            var item = new System.Windows.Controls.ComboBoxItem
+            {
+                Content = $"🖥️ Display {i + 1}: {scr.Bounds.Width}×{scr.Bounds.Height}{primaryBadge}",
+                Tag = scr.DeviceName
+            };
+            ScreenSelectionCombo.Items.Add(item);
+        }
+
+        SelectScreenInCombo(_settings.ScreenTarget);
+        _isUpdatingUi = false;
+    }
+
+    private void SelectScreenInCombo(string target)
+    {
+        if (ScreenSelectionCombo == null) return;
+
+        for (int i = 0; i < ScreenSelectionCombo.Items.Count; i++)
+        {
+            if (ScreenSelectionCombo.Items[i] is System.Windows.Controls.ComboBoxItem item &&
+                item.Tag is string tag &&
+                string.Equals(tag, target, StringComparison.OrdinalIgnoreCase))
+            {
+                ScreenSelectionCombo.SelectedIndex = i;
+                return;
+            }
+        }
+
+        ScreenSelectionCombo.SelectedIndex = 0;
+    }
+
+    private void OnScreenTargetRadioChanged(object sender, RoutedEventArgs e)
+    {
+        if (_isUpdatingUi || _settings == null) return;
+
+        if (sender is WpfRadioButton radio && radio.Tag is string tag && radio.IsChecked == true)
+        {
+            _settings.ScreenTarget = tag;
+            _isUpdatingUi = true;
+            SelectScreenInCombo(tag);
+            _isUpdatingUi = false;
+
+            ApplyState();
+            _settings.Save();
+        }
+    }
+
+    private void OnScreenComboChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (_isUpdatingUi || _settings == null || ScreenSelectionCombo?.SelectedItem is not System.Windows.Controls.ComboBoxItem item)
+            return;
+
+        if (item.Tag is string tag)
+        {
+            _settings.ScreenTarget = tag;
+
+            _isUpdatingUi = true;
+            if (tag == "All")
+            {
+                if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = true;
+            }
+            else if (tag == "Primary")
+            {
+                if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = true;
+            }
+            else
+            {
+                if (ScreenAllRadio != null) ScreenAllRadio.IsChecked = false;
+                if (ScreenPrimaryRadio != null) ScreenPrimaryRadio.IsChecked = false;
+            }
+            _isUpdatingUi = false;
+
+            ApplyState();
+            _settings.Save();
+        }
+    }
+
+    private void OnDisplaySettingsChanged(object? sender, EventArgs e)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            RefreshScreenList();
+            ApplyState();
+        });
+    }
+
     public void PerformExit()
     {
         Microsoft.Win32.SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+        Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
         if (WindowState == WindowState.Normal)
         {
             _settings.WindowLeft = Left;

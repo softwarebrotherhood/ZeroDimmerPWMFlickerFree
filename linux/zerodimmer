@@ -48,6 +48,7 @@ class DimmerEngine:
         self.is_x11 = os.environ.get("XDG_SESSION_TYPE", "").lower() == "x11" or (
             "DISPLAY" in os.environ and "WAYLAND_DISPLAY" not in os.environ
         )
+        self.screen_target = "All"  # 'All', 'Primary', or specific output name
         self.active_outputs = self._detect_xrandr_outputs()
         self.overlay_windows = []
 
@@ -66,11 +67,13 @@ class DimmerEngine:
             pass
         return outputs
 
-    def update(self, level, enabled, tint, mode="auto"):
+    def update(self, level, enabled, tint, mode="auto", screen_target=None):
         self.level = max(0, min(90, int(level)))
         self.enabled = enabled
         self.tint = tint
         self.mode = mode
+        if screen_target is not None:
+            self.screen_target = screen_target
         self.apply()
 
     def get_rgb_factors(self):
@@ -95,9 +98,10 @@ class DimmerEngine:
         if use_xrandr:
             self.clear_overlays()
             r, g, b = self.get_rgb_factors()
-            for out in self.active_outputs:
+            for idx, out in enumerate(self.active_outputs):
+                should_dim = (self.screen_target == "All") or (self.screen_target == "Primary" and idx == 0) or (self.screen_target == out)
                 try:
-                    gamma_str = f"{r:.2f}:{g:.2f}:{b:.2f}"
+                    gamma_str = f"{r:.2f}:{g:.2f}:{b:.2f}" if should_dim else "1.00:1.00:1.00"
                     subprocess.run(
                         ["xrandr", "--output", out, "--gamma", gamma_str, "--brightness", "1.0"],
                         stdout=subprocess.DEVNULL,
@@ -138,7 +142,8 @@ class DimmerEngine:
                 geom = monitor.get_geometry()
                 win.move(geom.x, geom.y)
                 win.resize(geom.width, geom.height)
-            win.update_color(tint_rgb, opacity)
+            should_dim = (self.screen_target == "All") or (self.screen_target == "Primary" and idx == 0)
+            win.update_color(tint_rgb, opacity if should_dim else 0.0)
             win.show_all()
             win.make_click_through()
 
@@ -369,6 +374,28 @@ class MainWindow(Gtk.Window):
             presets_box.pack_start(btn, True, True, 0)
         page_dimmer.pack_start(presets_box, False, False, 0)
 
+        # Connected Screens & Monitors
+        screens_title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        screen_title = Gtk.Label(label="Connected Screens & Monitors")
+        screen_title.set_xalign(0)
+        screen_title.get_style_context().add_class("subtitle")
+        screens_title_box.pack_start(screen_title, True, True, 0)
+
+        n_screens = max(1, len(self.engine.active_outputs))
+        screen_count_lbl = Gtk.Label(label=f"{n_screens} Connected" if n_screens > 1 else "1 Connected")
+        screen_count_lbl.get_style_context().add_class("subtitle")
+        screens_title_box.pack_end(screen_count_lbl, False, False, 0)
+        page_dimmer.pack_start(screens_title_box, False, False, 0)
+
+        screens_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        screens_box.set_homogeneous(True)
+        self.screen_all_radio = Gtk.RadioButton.new_with_label_from_widget(None, "All Screens")
+        self.screen_primary_radio = Gtk.RadioButton.new_with_label_from_widget(self.screen_all_radio, "Primary Only")
+        self.screen_all_radio.connect("toggled", self.on_screen_target_changed)
+        screens_box.pack_start(self.screen_all_radio, True, True, 0)
+        screens_box.pack_start(self.screen_primary_radio, True, True, 0)
+        page_dimmer.pack_start(screens_box, False, False, 0)
+
         # Eye Care Tints
         tint_title = Gtk.Label(label="Eye Care & Night Tint")
         tint_title.set_xalign(0)
@@ -477,6 +504,13 @@ class MainWindow(Gtk.Window):
         val = int(scale.get_value())
         self.val_label.set_text(f"{val}%")
         self.engine.update(val, self.enable_switch.get_active(), self.engine.tint, self.engine.mode)
+
+    def on_screen_target_changed(self, widget):
+        if self.screen_all_radio.get_active():
+            self.engine.screen_target = "All"
+        else:
+            self.engine.screen_target = "Primary"
+        self.engine.apply()
 
     def make_preset_handler(self, target_val):
         def handler(button):

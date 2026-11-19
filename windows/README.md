@@ -53,6 +53,7 @@ ZeroDimmer interfaces with the Windows **Magnification API** (`MagSetFullscreenC
 ## ✨ Key Features
 
 - 🛡️ **Zero PWM Flicker:** Stops backlight pulsing completely on OLED, mini-LED, and IPS displays.
+- 🖥️ **Connected Screens & Monitors Control:** Option to dim all connected monitors simultaneously, primary screen only, or target specific individual displays.
 - 🪟 **Complete Taskbar & System Coverage:** Full desktop dimming without taskbar or context menu brightness leaks.
 - 🌓 **Windows Theme Integration:** Detects Windows light/dark theme live (`AppsUseLightTheme`) and updates automatically in real-time via `SystemEvents.UserPreferenceChanged`.
 - 📍 **Tray-Anchored Bottom-Right Placement:** Launches docked above the system tray; freely draggable with multi-monitor memory.

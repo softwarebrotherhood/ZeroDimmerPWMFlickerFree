@@ -74,6 +74,7 @@ Result: ZERO Backlight Strobing, Maximum Eye Comfort, Natural Contrast
 ## ✨ Key Features & Benefits
 
 - 🛡️ **Zero PWM Flicker Guaranteed:** By maintaining 100% hardware backlight duty cycle, PWM strobing is completely eliminated.
+- 🖥️ **Full Multi-Monitor & Connected Displays Control:** Choose to dim all connected screens/monitors together, restrict dimming to your primary screen only, or target specific individual displays.
 - 🪟 **Uniform Desktop Dimming (No Bright Leaks):** Unlike primitive browser extensions or overlay apps that leak bright taskbars, Start menus, or right-click context menus, ZeroDimmer dims the **entire display buffer uniformly**.
 - 🌓 **Dynamic Light & Dark Theme Adaptation:** Adapts automatically to your Windows/macOS/Linux system theme in real-time, or lets you choose manual Light or Dark appearance.
 - 📍 **Smart Window Placement & Memory:** Starts docked neatly in the bottom-right corner near your system tray; freely draggable with multi-monitor position memory.

@@ -10,6 +10,7 @@ public class DimmerEngine {
     private var currentLevel: Int = 0
     private var currentTint: String = "NeutralBlack"
     private var isEnabled: Bool = true
+    private var screenTarget: String = "All"
 
     init() {
         saveOriginalGamma()
@@ -44,11 +45,12 @@ public class DimmerEngine {
         applyCurrentState()
     }
 
-    public func update(level: Int, enabled: Bool, tint: String, useCoreGraphics: Bool = true) {
+    public func update(level: Int, enabled: Bool, tint: String, useCoreGraphics: Bool = true, target: String = "All") {
         currentLevel = max(0, min(90, level))
         isEnabled = enabled
         currentTint = tint
         isDwmMode = useCoreGraphics
+        screenTarget = target
 
         applyCurrentState()
     }
@@ -88,19 +90,28 @@ public class DimmerEngine {
             var displays = [CGDirectDisplayID](repeating: 0, count: Int(displayCount))
             CGGetOnlineDisplayList(displayCount, &displays, &displayCount)
 
+            let mainID = CGMainDisplayID()
             for d in displays {
-                var red = [CGGammaValue](repeating: 0, count: 256)
-                var green = [CGGammaValue](repeating: 0, count: 256)
-                var blue = [CGGammaValue](repeating: 0, count: 256)
+                let shouldDim = (screenTarget == "All") || (screenTarget == "Primary" && d == mainID)
+                if shouldDim {
+                    var red = [CGGammaValue](repeating: 0, count: 256)
+                    var green = [CGGammaValue](repeating: 0, count: 256)
+                    var blue = [CGGammaValue](repeating: 0, count: 256)
 
-                for i in 0..<256 {
-                    let base = Float(i) / 255.0
-                    red[i] = CGGammaValue(base * rFactor)
-                    green[i] = CGGammaValue(base * gFactor)
-                    blue[i] = CGGammaValue(base * bFactor)
+                    for i in 0..<256 {
+                        let base = Float(i) / 255.0
+                        red[i] = CGGammaValue(base * rFactor)
+                        green[i] = CGGammaValue(base * gFactor)
+                        blue[i] = CGGammaValue(base * bFactor)
+                    }
+
+                    CGSetDisplayTransferByTable(d, 256, &red, &green, &blue)
+                } else if let ramps = originalRamps[d] {
+                    var red = ramps.0
+                    var green = ramps.1
+                    var blue = ramps.2
+                    CGSetDisplayTransferByTable(d, 256, &red, &green, &blue)
                 }
-
-                CGSetDisplayTransferByTable(d, 256, &red, &green, &blue)
             }
         } else {
             // Overlay window mode
@@ -111,9 +122,11 @@ public class DimmerEngine {
             }
 
             let opacity = isEnabled ? CGFloat(currentLevel) / 100.0 : 0.0
-            let color = getTintColor().withAlphaComponent(opacity)
+            let mainScreen = NSScreen.main
 
             for win in overlayWindows {
+                let shouldDim = (screenTarget == "All") || (screenTarget == "Primary" && win.screen == mainScreen)
+                let color = shouldDim ? getTintColor().withAlphaComponent(opacity) : NSColor.clear
                 win.backgroundColor = color
                 win.orderFrontRegardless()
             }

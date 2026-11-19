@@ -15,12 +15,15 @@ public class TrayIconManager : IDisposable
     private Icon? _currentIcon;
     private readonly ToolStripMenuItem _activeMenuItem;
     private readonly ToolStripMenuItem _startWithWindowsItem;
+    private readonly ToolStripMenuItem _screenAllItem;
+    private readonly ToolStripMenuItem _screenPrimaryItem;
 
     public event Action? OnOpenRequested;
     public event Action? OnToggleRequested;
     public event Action<int>? OnPresetSelected;
     public event Action? OnExitRequested;
     public event Action<bool>? OnStartupToggleRequested;
+    public event Action<string>? OnScreenTargetSelected;
 
     public TrayIconManager()
     {
@@ -53,6 +56,16 @@ public class TrayIconManager : IDisposable
         presetsMenu.DropDownItems.Add(new ToolStripMenuItem("60% Darkness", null, (s, e) => OnPresetSelected?.Invoke(60)));
         presetsMenu.DropDownItems.Add(new ToolStripMenuItem("80% Darkness", null, (s, e) => OnPresetSelected?.Invoke(80)));
         menu.Items.Add(presetsMenu);
+
+        var screensSubMenu = new ToolStripMenuItem("Target Displays");
+        _screenAllItem = new ToolStripMenuItem("🌐 All Connected Screens", null, (s, e) => OnScreenTargetSelected?.Invoke("All"))
+        {
+            Checked = true
+        };
+        _screenPrimaryItem = new ToolStripMenuItem("💻 Primary Screen Only", null, (s, e) => OnScreenTargetSelected?.Invoke("Primary"));
+        screensSubMenu.DropDownItems.Add(_screenAllItem);
+        screensSubMenu.DropDownItems.Add(_screenPrimaryItem);
+        menu.Items.Add(screensSubMenu);
 
         menu.Items.Add(new ToolStripSeparator());
 
@@ -101,10 +114,12 @@ public class TrayIconManager : IDisposable
         UpdateIcon(true, 35);
     }
 
-    public void UpdateStatus(bool isEnabled, int level, bool startWithWindows)
+    public void UpdateStatus(bool isEnabled, int level, bool startWithWindows, string screenTarget = "All")
     {
         _activeMenuItem.Checked = isEnabled;
         _startWithWindowsItem.Checked = startWithWindows;
+        _screenAllItem.Checked = screenTarget == "All";
+        _screenPrimaryItem.Checked = screenTarget == "Primary";
 
         string tooltip = isEnabled && level > 0
             ? $"ZeroDimmer: {level}% (Active)"

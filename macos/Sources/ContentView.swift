@@ -15,6 +15,9 @@ public class AppState: ObservableObject {
     @Published public var useCoreGraphics: Bool = true {
         didSet { applySettings() }
     }
+    @Published public var screenTarget: String = "All" {
+        didSet { applySettings() }
+    }
 
     private init() {}
 
@@ -23,7 +26,8 @@ public class AppState: ObservableObject {
             level: Int(dimLevel),
             enabled: isEnabled,
             tint: currentTint,
-            useCoreGraphics: useCoreGraphics
+            useCoreGraphics: useCoreGraphics,
+            target: screenTarget
         )
     }
 
@@ -111,6 +115,20 @@ public struct ContentView: View {
                         PresetButton(title: "25%", target: 25, current: $state.dimLevel)
                         PresetButton(title: "50%", target: 50, current: $state.dimLevel)
                         PresetButton(title: "75%", target: 75, current: $state.dimLevel)
+                    }
+                    .disabled(!state.isEnabled)
+
+                    // Connected Screens & Displays Target
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Connected Screens")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(.secondary)
+
+                        Picker("", selection: $state.screenTarget) {
+                            Text("All Connected Screens").tag("All")
+                            Text("Primary Only").tag("Primary")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
                     }
                     .disabled(!state.isEnabled)
 
