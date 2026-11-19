@@ -1,6 +1,6 @@
 ; Inno Setup Script for ZeroDimmer
 #define MyAppName "ZeroDimmer"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "softwarebrotherhood"
 #define MyAppURL "https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree"
 #define MyAppExeName "ZeroDimmer.exe"
@@ -19,7 +19,7 @@ AllowNoIcons=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=bin\Release\net9.0-windows\installer
-OutputBaseFilename=ZeroDimmer_Setup_v1.0.0
+OutputBaseFilename=ZeroDimmer_Setup_v1.1.0
 SetupIconFile=app.ico
 UninstallDisplayIcon={app}\app.ico
 Compression=lzma2/ultra64

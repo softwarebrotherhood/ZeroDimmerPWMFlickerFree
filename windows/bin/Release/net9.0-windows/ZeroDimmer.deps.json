@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v9.0": {
-      "ZeroDimmer/1.0.0": {
+      "ZeroDimmer/1.1.0": {
         "runtime": {
           "ZeroDimmer.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "ZeroDimmer/1.0.0": {
+    "ZeroDimmer/1.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

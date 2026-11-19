@@ -67,7 +67,7 @@ ZeroDimmer interfaces with the Windows **Magnification API** (`MagSetFullscreenC
 ## 📥 Installation Options
 
 ### Option 1: Standalone Windows Installer (Recommended)
-1. Download [**`ZeroDimmer_Setup_v1.0.0.exe`**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
+1. Download [**`ZeroDimmer_Setup_v1.1.0.exe`**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.1.0.exe).
 2. Run the installer:
    - Installs to local app data (`%LOCALAPPDATA%\Programs\ZeroDimmer`).
    - **No administrator rights required** to install.

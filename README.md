@@ -6,7 +6,7 @@
 [![Windows 10 & 11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)](windows/)
 [![macOS Apple Silicon & Intel](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
 [![Linux X11 & Wayland](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
-[![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-0284C7?logo=github&logoColor=white)](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/releases)
+[![Release: v1.1.0](https://img.shields.io/badge/Release-v1.1.0-0284C7?logo=github&logoColor=white)](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/releases)
 [![Official Website](https://img.shields.io/badge/Website-Live%20Demo-38BDF8?logo=googlechrome&logoColor=white)](https://softwarebrotherhood.github.io/ZeroDimmerPWMFlickerFree/)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -21,6 +21,7 @@
 - [Multi-Platform Architecture Comparison](#-multi-platform-architecture-comparison)
 - [Platform Quick Guides (Windows, macOS, Linux)](#-platform-quick-guides)
 - [Circadian Eye Care & Night Tints](#-circadian-eye-care--night-tints)
+- [Changelog & Version History](#-changelog--version-history)
 - [Frequently Asked Questions (FAQ)](#-frequently-asked-questions-faq)
 - [Privacy, Safety & Hardware Integrity](#-privacy-safety--hardware-integrity)
 - [Support & Community](#-support--community)
@@ -34,7 +35,7 @@ Download official standalone installers and portable packages for your operating
 
 | Platform | Download Package | Type | Compatibility |
 | :--- | :--- | :--- | :--- |
-| **🪟 Windows** | [**Download Windows Installer (.exe)**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe) | Inno Setup | Windows 10 & 11 (x64 / ARM64) |
+| **🪟 Windows** | [**Download Windows Installer (.exe)**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.1.0.exe) | Inno Setup | Windows 10 & 11 (x64 / ARM64) |
 | **🪟 Windows Portable** | [**Download Portable ZIP**](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/tree/main/windows/bin/Release/net9.0-windows/publish) | Standalone `.exe` | Windows 10 & 11 (x64) |
 | **🍎 macOS** | [**macOS App Package & Guide**](macos/) | `.app` / Swift SPM | Apple Silicon (M1/M2/M3/M4) & Intel |
 | **🐧 Linux** | [**Linux 1-Click Installer**](linux/) | Desktop Script / App | X11 & Wayland (Universal) |
@@ -102,7 +103,7 @@ Result: ZERO Backlight Strobing, Maximum Eye Comfort, Natural Contrast
 ## 🚀 Platform Quick Guides
 
 ### 🪟 Windows (10 & 11)
-- **Installer:** Download and run [`ZeroDimmer_Setup_v1.0.0.exe`](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.0.0.exe).
+- **Installer:** Download and run [`ZeroDimmer_Setup_v1.1.0.exe`](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/raw/main/windows/bin/Release/net9.0-windows/installer/ZeroDimmer_Setup_v1.1.0.exe).
 - **Global Hotkeys:**
   - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↓</kbd> : Darken screen (+5%)
   - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>↑</kbd> : Brighten screen (-5%)
@@ -139,6 +140,37 @@ ZeroDimmer includes four specialized color calibration modes to reduce optical f
 2. **Warm Amber (Night Filter):** Blocks harsh blue wavelengths below 480nm to support natural melatonin production.
 3. **Cozy Candle (Late Night):** Ultra-warm deep amber glow designed for dark rooms and late-night coding or reading sessions.
 4. **Soft Green (High Contrast):** Calming tint optimized for reading documentation, spreadsheets, and dense code without optical glare.
+
+---
+
+## 📜 Changelog & Version History
+
+### [v1.1.0] — Multi-Monitor & Independent Display Controls
+- **🖥️ Multi-Monitor & Connected Displays Engine**:
+  - **All Screens (Unified)**: Dims all connected screens simultaneously with a synchronized master darkness level.
+  - **Separate Per Screen Controls**: Set independent darkness levels per display (e.g. 50% on laptop OLED, 20% on external IPS monitor).
+  - **Interactive Display Switcher Chips**: One-click screen selection buttons showing live per-monitor percentages (`[Display 1: 45%]`, `[Display 2: 20%]`).
+  - **Per-Monitor Quick Sliders**: Dedicated inline sliders and `[-]` / `[+]` steppers for each detected display.
+  - **Dynamic Display Detection**: Real-time hotplug detection (`SystemEvents.DisplaySettingsChanged`) that updates automatically when displays or docks are connected/disconnected.
+  - **System Tray Display Switcher**: Switch between "All Screens (Unified)" and "Separate Per Screen" directly from the taskbar context menu.
+- **📊 Analytics & Web Integration**:
+  - Added Google Tag Manager (`GTM-5KZH8C87`) & Search Console verification.
+  - Added interactive Changelog section to the official website and documentation.
+- **🪟 Windows UX Refinements**:
+  - Enhanced bottom-right placement memory across mixed-DPI multi-monitor layouts.
+  - Native Top Tabs and dynamic light/dark theme adaptation.
+  - Freshly compiled Inno Setup installer: `ZeroDimmer_Setup_v1.1.0.exe`.
+
+### [v1.0.0] — Initial Release
+- **Initial ZeroDimmer Launch**:
+  - Zero PWM flicker elimination by maintaining 100% constant DC backlight duty cycle.
+  - Dual dimming engines: Deep DWM Magnification pipeline (`MagSetFullscreenColorEffect`) and Classic Transparent Layered Overlay.
+  - Full desktop and taskbar coverage with zero white bright leaks or flashing popups.
+  - 4 Circadian night tints: Neutral Black, Warm Amber, Cozy Candle, Soft Green.
+  - Global hotkeys (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Up</kbd>/<kbd>Down</kbd>, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>D</kbd>, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Esc</kbd>) with floating OSD pill feedback.
+  - Inno Setup installer (per-user `%LOCALAPPDATA%`, no admin rights required) and portable standalone package.
+  - macOS CoreGraphics transfer table engine and Linux xrandr / Wayland overlay implementations.
+  - Ko-fi support integration for `softwarebrotherhood`.
 
 ---
 
