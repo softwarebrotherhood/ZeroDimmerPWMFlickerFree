@@ -7,6 +7,7 @@
 [![macOS Apple Silicon & Intel](https://img.shields.io/badge/macOS-12%2B%20(Monterey%20--%20Sequoia)-000000?logo=apple&logoColor=white)](macos/)
 [![Linux X11 & Wayland](https://img.shields.io/badge/Linux-X11%20%26%20Wayland-FCC624?logo=linux&logoColor=black)](linux/)
 [![Release: v1.1.0](https://img.shields.io/badge/Release-v1.1.0-0284C7?logo=github&logoColor=white)](https://github.com/softwarebrotherhood/ZeroDimmerPWMFlickerFree/releases)
+[![SourceForge](https://img.shields.io/badge/SourceForge-Mirror-EE5F00?logo=sourceforge&logoColor=white)](https://sourceforge.net/projects/zerodimmer/)
 [![Official Website](https://img.shields.io/badge/Website-Live%20Demo-38BDF8?logo=googlechrome&logoColor=white)](https://softwarebrotherhood.github.io/ZeroDimmerPWMFlickerFree/)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Project-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/softwarebrotherhood)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
